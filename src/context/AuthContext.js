@@ -4,7 +4,7 @@ const AuthContext = createContext();
 
 const ADMIN_CREDENTIALS = {
   username: 'admin',
-  password: 'kamakhya@2025',
+  password: 'Sanjay@1968',
 };
 
 export function AuthProvider({ children }) {

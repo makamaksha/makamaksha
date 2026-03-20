@@ -231,122 +231,115 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
         <TabPanel value={tab} index={0}>
           <Card
             sx={{
-              bgcolor: 'rgba(255,255,255,0.04)',
+              bgcolor: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,215,0,0.2)',
-              borderRadius: 3,
+              borderRadius: 4,
               maxWidth: 700,
               mx: 'auto',
+              overflow: 'hidden',
             }}
           >
-            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-              <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700, mb: 3 }}>
-                📷 {t('admin.uploadPhoto')}
-              </Typography>
+            {/* Card header band */}
+            <Box sx={{ background: 'linear-gradient(135deg, rgba(139,26,26,0.6) 0%, rgba(80,10,10,0.6) 100%)', px: 4, py: 2.5, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <CloudUploadIcon sx={{ color: '#FFD700', fontSize: 28 }} />
+              <Box>
+                <Typography variant="h6" sx={{ color: '#FFD700', fontWeight: 700, lineHeight: 1.2 }}>
+                  {t('admin.uploadPhoto')}
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'rgba(255,220,150,0.7)' }}>
+                  Add a new photo to the gallery
+                </Typography>
+              </Box>
+            </Box>
 
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  {/* File Upload Area */}
-                  <Box
-                    onClick={() => photoInputRef.current?.click()}
-                    sx={{
-                      border: '2px dashed rgba(255,215,0,0.4)',
-                      borderRadius: 2,
-                      p: 3,
-                      textAlign: 'center',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      '&:hover': { border: '2px dashed rgba(255,215,0,0.8)', bgcolor: 'rgba(255,215,0,0.05)' },
-                    }}
-                  >
-                    {photoPreview ? (
-                      <img
-                        src={photoPreview}
-                        alt="preview"
-                        style={{ maxHeight: 160, maxWidth: '100%', borderRadius: 8 }}
-                      />
-                    ) : (
-                      <>
-                        <CloudUploadIcon sx={{ color: 'rgba(255,215,0,0.5)', fontSize: 48, mb: 1 }} />
-                        <Typography sx={{ color: 'rgba(255,255,255,0.5)' }}>
-                          Click to upload photo
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)' }}>
-                          JPG, PNG, WEBP supported
-                        </Typography>
-                      </>
-                    )}
+            <CardContent sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 3 }}>
+              {/* Drop zone */}
+              <Box
+                onClick={() => photoInputRef.current?.click()}
+                sx={{
+                  border: `2px dashed ${photoPreview ? 'rgba(255,215,0,0.6)' : 'rgba(255,215,0,0.3)'}`,
+                  borderRadius: 3,
+                  p: 4,
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  bgcolor: photoPreview ? 'rgba(255,215,0,0.04)' : 'rgba(255,255,255,0.02)',
+                  transition: 'all 0.25s',
+                  '&:hover': {
+                    border: '2px dashed rgba(255,215,0,0.8)',
+                    bgcolor: 'rgba(255,215,0,0.06)',
+                    transform: 'scale(1.005)',
+                  },
+                }}
+              >
+                {photoPreview ? (
+                  <Box>
+                    <img src={photoPreview} alt="preview" style={{ maxHeight: 180, maxWidth: '100%', borderRadius: 10, boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }} />
+                    <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)', display: 'block', mt: 1 }}>
+                      Click to change image
+                    </Typography>
                   </Box>
-                  <input
-                    ref={photoInputRef}
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={handlePhotoFile}
-                  />
-                </Grid>
+                ) : (
+                  <>
+                    <Box sx={{ fontSize: '3.5rem', mb: 1 }}>🖼️</Box>
+                    <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, mb: 0.5 }}>
+                      Click to select a photo
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)' }}>
+                      Supports JPG · PNG · WEBP
+                    </Typography>
+                  </>
+                )}
+              </Box>
+              <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoFile} />
 
-                <Grid item xs={12}>
-                  <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)', display: 'block', mb: 1 }}>
-                    — OR paste an image URL —
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    label="Image URL"
-                    value={photoUrl}
-                    onChange={(e) => { setPhotoUrl(e.target.value); setPhotoPreview(e.target.value); }}
-                    size="small"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LinkIcon sx={{ color: 'rgba(255,215,0,0.5)', fontSize: '1rem' }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={inputSx}
-                  />
-                </Grid>
+              {/* OR divider */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.15)' }} />
+                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.5)', fontWeight: 600 }}>OR PASTE URL</Typography>
+                <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.15)' }} />
+              </Box>
 
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Caption (English)"
-                    value={photoCaption}
-                    onChange={(e) => setPhotoCaption(e.target.value)}
-                    size="small"
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="कैप्शन (हिंदी)"
-                    value={photoCaptionHi}
-                    onChange={(e) => setPhotoCaptionHi(e.target.value)}
-                    size="small"
-                    sx={inputSx}
-                  />
-                </Grid>
+              <TextField
+                fullWidth
+                label="Image URL"
+                value={photoUrl}
+                onChange={(e) => { setPhotoUrl(e.target.value); setPhotoPreview(e.target.value); }}
+                placeholder="https://example.com/image.jpg"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LinkIcon sx={{ color: 'rgba(255,215,0,0.5)', fontSize: '1.1rem' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputSx}
+              />
 
-                <Grid item xs={12}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    startIcon={<CloudUploadIcon />}
-                    onClick={handleAddPhoto}
-                    disabled={!photoUrl && !photoPreview}
-                    sx={{
-                      bgcolor: '#8B1A1A',
-                      color: '#FFD700',
-                      fontWeight: 700,
-                      py: 1.3,
-                      '&:hover': { bgcolor: '#a52828' },
-                      '&.Mui-disabled': { bgcolor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.3)' },
-                    }}
-                  >
-                    {t('admin.uploadPhoto')}
-                  </Button>
-                </Grid>
-              </Grid>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                <TextField fullWidth label="Caption (English)" value={photoCaption} onChange={(e) => setPhotoCaption(e.target.value)} size="small" sx={inputSx} />
+                <TextField fullWidth label="कैप्शन (हिंदी)" value={photoCaptionHi} onChange={(e) => setPhotoCaptionHi(e.target.value)} size="small" sx={inputSx} />
+              </Box>
+
+              <Button
+                fullWidth
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+                onClick={handleAddPhoto}
+                disabled={!photoUrl && !photoPreview}
+                sx={{
+                  background: 'linear-gradient(135deg, #8B1A1A 0%, #a52828 100%)',
+                  color: '#FFD700',
+                  fontWeight: 700,
+                  py: 1.6,
+                  fontSize: '1rem',
+                  borderRadius: 2,
+                  boxShadow: '0 4px 15px rgba(139,26,26,0.4)',
+                  '&:hover': { background: 'linear-gradient(135deg, #a52828 0%, #c03030 100%)', boxShadow: '0 6px 20px rgba(139,26,26,0.6)' },
+                  '&.Mui-disabled': { bgcolor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.3)' },
+                }}
+              >
+                Add Photo to Gallery
+              </Button>
             </CardContent>
           </Card>
         </TabPanel>
@@ -355,92 +348,93 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
         <TabPanel value={tab} index={1}>
           <Card
             sx={{
-              bgcolor: 'rgba(255,255,255,0.04)',
+              bgcolor: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,215,0,0.2)',
-              borderRadius: 3,
+              borderRadius: 4,
               maxWidth: 700,
               mx: 'auto',
+              overflow: 'hidden',
             }}
           >
-            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-              <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700, mb: 3 }}>
-                🎬 {t('admin.uploadVideo')}
-              </Typography>
+            <Box sx={{ background: 'linear-gradient(135deg, rgba(139,26,26,0.6) 0%, rgba(80,10,10,0.6) 100%)', px: 4, py: 2.5, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <VideoCallIcon sx={{ color: '#FFD700', fontSize: 28 }} />
+              <Box>
+                <Typography variant="h6" sx={{ color: '#FFD700', fontWeight: 700, lineHeight: 1.2 }}>
+                  {t('admin.uploadVideo')}
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'rgba(255,220,150,0.7)' }}>
+                  Add a YouTube link or video URL
+                </Typography>
+              </Box>
+            </Box>
 
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-                    {['youtube', 'file'].map((type) => (
-                      <Chip
-                        key={type}
-                        label={type === 'youtube' ? '▶ YouTube URL' : '📁 File URL'}
-                        onClick={() => setVideoType(type)}
-                        sx={{
-                          cursor: 'pointer',
-                          bgcolor: videoType === type ? 'rgba(255,215,0,0.2)' : 'transparent',
-                          color: videoType === type ? '#FFD700' : 'rgba(255,255,255,0.5)',
-                          border: `1px solid ${videoType === type ? 'rgba(255,215,0,0.6)' : 'rgba(255,255,255,0.2)'}`,
-                        }}
-                      />
-                    ))}
-                  </Box>
-                  <TextField
-                    fullWidth
-                    label={videoType === 'youtube' ? 'YouTube URL (e.g. https://youtu.be/...)' : 'Video File URL'}
-                    value={videoUrl}
-                    onChange={(e) => setVideoUrl(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LinkIcon sx={{ color: 'rgba(255,215,0,0.5)', fontSize: '1rem' }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={inputSx}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Caption (English)"
-                    value={videoCaption}
-                    onChange={(e) => setVideoCaption(e.target.value)}
-                    size="small"
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="कैप्शन (हिंदी)"
-                    value={videoCaptionHi}
-                    onChange={(e) => setVideoCaptionHi(e.target.value)}
-                    size="small"
-                    sx={inputSx}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    startIcon={<VideoCallIcon />}
-                    onClick={handleAddVideo}
-                    disabled={!videoUrl}
+            <CardContent sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 3 }}>
+              {/* Type selector */}
+              <Box sx={{ display: 'flex', gap: 1.5 }}>
+                {[{ type: 'youtube', label: '▶ YouTube', desc: 'youtu.be link' }, { type: 'file', label: '📁 Direct URL', desc: 'mp4 / web link' }].map((opt) => (
+                  <Box
+                    key={opt.type}
+                    onClick={() => setVideoType(opt.type)}
                     sx={{
-                      bgcolor: '#8B1A1A',
-                      color: '#FFD700',
-                      fontWeight: 700,
-                      py: 1.3,
-                      '&:hover': { bgcolor: '#a52828' },
-                      '&.Mui-disabled': { bgcolor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.3)' },
+                      flex: 1,
+                      p: 2,
+                      borderRadius: 2,
+                      border: `2px solid ${videoType === opt.type ? 'rgba(255,215,0,0.6)' : 'rgba(255,255,255,0.1)'}`,
+                      bgcolor: videoType === opt.type ? 'rgba(255,215,0,0.08)' : 'transparent',
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                      transition: 'all 0.2s',
+                      '&:hover': { border: '2px solid rgba(255,215,0,0.4)' },
                     }}
                   >
-                    {t('admin.uploadVideo')}
-                  </Button>
-                </Grid>
-              </Grid>
+                    <Typography sx={{ color: videoType === opt.type ? '#FFD700' : 'rgba(255,255,255,0.6)', fontWeight: 700, fontSize: '0.9rem' }}>
+                      {opt.label}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)' }}>{opt.desc}</Typography>
+                  </Box>
+                ))}
+              </Box>
+
+              <TextField
+                fullWidth
+                label={videoType === 'youtube' ? 'YouTube URL (youtu.be/... or youtube.com/watch?v=...)' : 'Video File URL'}
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LinkIcon sx={{ color: 'rgba(255,215,0,0.5)', fontSize: '1.1rem' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={inputSx}
+              />
+
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                <TextField fullWidth label="Caption (English)" value={videoCaption} onChange={(e) => setVideoCaption(e.target.value)} size="small" sx={inputSx} />
+                <TextField fullWidth label="कैप्शन (हिंदी)" value={videoCaptionHi} onChange={(e) => setVideoCaptionHi(e.target.value)} size="small" sx={inputSx} />
+              </Box>
+
+              <Button
+                fullWidth
+                variant="contained"
+                startIcon={<VideoCallIcon />}
+                onClick={handleAddVideo}
+                disabled={!videoUrl}
+                sx={{
+                  background: 'linear-gradient(135deg, #8B1A1A 0%, #a52828 100%)',
+                  color: '#FFD700',
+                  fontWeight: 700,
+                  py: 1.6,
+                  fontSize: '1rem',
+                  borderRadius: 2,
+                  boxShadow: '0 4px 15px rgba(139,26,26,0.4)',
+                  '&:hover': { background: 'linear-gradient(135deg, #a52828 0%, #c03030 100%)', boxShadow: '0 6px 20px rgba(139,26,26,0.6)' },
+                  '&.Mui-disabled': { bgcolor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.3)' },
+                }}
+              >
+                Add Video to Gallery
+              </Button>
             </CardContent>
           </Card>
         </TabPanel>
@@ -449,121 +443,91 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
         <TabPanel value={tab} index={2}>
           <Card
             sx={{
-              bgcolor: 'rgba(255,255,255,0.04)',
+              bgcolor: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,215,0,0.2)',
-              borderRadius: 3,
+              borderRadius: 4,
               maxWidth: 800,
               mx: 'auto',
+              overflow: 'hidden',
             }}
           >
-            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-              <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700, mb: 3 }}>
-                🗓️ {t('admin.addEvent')}
-              </Typography>
+            <Box sx={{ background: 'linear-gradient(135deg, rgba(139,26,26,0.6) 0%, rgba(80,10,10,0.6) 100%)', px: 4, py: 2.5, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <EventIcon sx={{ color: '#FFD700', fontSize: 28 }} />
+              <Box>
+                <Typography variant="h6" sx={{ color: '#FFD700', fontWeight: 700, lineHeight: 1.2 }}>
+                  {t('admin.addEvent')}
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'rgba(255,220,150,0.7)' }}>
+                  Publish a new event or festival
+                </Typography>
+              </Box>
+            </Box>
 
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label={`${t('admin.eventTitle')} (English)`}
-                    value={eventTitle}
-                    onChange={(e) => setEventTitle(e.target.value)}
-                    required
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label={`${t('admin.eventTitle')} (हिंदी)`}
-                    value={eventTitleHi}
-                    onChange={(e) => setEventTitleHi(e.target.value)}
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label={t('admin.eventDate')}
-                    type="date"
-                    value={eventDate}
-                    onChange={(e) => setEventDate(e.target.value)}
-                    required
-                    InputLabelProps={{ shrink: true }}
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="End Date (optional)"
-                    type="date"
-                    value={eventEndDate}
-                    onChange={(e) => setEventEndDate(e.target.value)}
-                    InputLabelProps={{ shrink: true }}
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label={`${t('admin.eventLocation')} (English)`}
-                    value={eventLocation}
-                    onChange={(e) => setEventLocation(e.target.value)}
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label={`${t('admin.eventLocation')} (हिंदी)`}
-                    value={eventLocationHi}
-                    onChange={(e) => setEventLocationHi(e.target.value)}
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label={`${t('admin.eventDesc')} (English)`}
-                    value={eventDesc}
-                    onChange={(e) => setEventDesc(e.target.value)}
-                    multiline
-                    rows={3}
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label={`${t('admin.eventDesc')} (हिंदी)`}
-                    value={eventDescHi}
-                    onChange={(e) => setEventDescHi(e.target.value)}
-                    multiline
-                    rows={3}
-                    sx={inputSx}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    startIcon={<EventIcon />}
-                    onClick={handleAddEvent}
-                    disabled={!eventTitle || !eventDate}
-                    sx={{
-                      bgcolor: '#8B1A1A',
-                      color: '#FFD700',
-                      fontWeight: 700,
-                      py: 1.3,
-                      '&:hover': { bgcolor: '#a52828' },
-                      '&.Mui-disabled': { bgcolor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.3)' },
-                    }}
-                  >
-                    {t('admin.saveEvent')}
-                  </Button>
-                </Grid>
-              </Grid>
+            <CardContent sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+              {/* Title row */}
+              <Box>
+                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', display: 'block', mb: 1 }}>
+                  Event Title
+                </Typography>
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+                  <TextField fullWidth label="Title (English)" value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} required sx={inputSx} />
+                  <TextField fullWidth label="शीर्षक (हिंदी)" value={eventTitleHi} onChange={(e) => setEventTitleHi(e.target.value)} sx={inputSx} />
+                </Box>
+              </Box>
+
+              {/* Date row */}
+              <Box>
+                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', display: 'block', mb: 1 }}>
+                  📅 Event Dates
+                </Typography>
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+                  <TextField fullWidth label="Start Date *" type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} required InputLabelProps={{ shrink: true }} sx={inputSx} />
+                  <TextField fullWidth label="End Date (optional)" type="date" value={eventEndDate} onChange={(e) => setEventEndDate(e.target.value)} InputLabelProps={{ shrink: true }} sx={inputSx} />
+                </Box>
+              </Box>
+
+              {/* Location row */}
+              <Box>
+                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', display: 'block', mb: 1 }}>
+                  📍 Location
+                </Typography>
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+                  <TextField fullWidth label="Location (English)" value={eventLocation} onChange={(e) => setEventLocation(e.target.value)} sx={inputSx} />
+                  <TextField fullWidth label="स्थान (हिंदी)" value={eventLocationHi} onChange={(e) => setEventLocationHi(e.target.value)} sx={inputSx} />
+                </Box>
+              </Box>
+
+              {/* Description */}
+              <Box>
+                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', display: 'block', mb: 1 }}>
+                  📝 Description
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <TextField fullWidth label="Description (English)" value={eventDesc} onChange={(e) => setEventDesc(e.target.value)} multiline rows={3} sx={inputSx} />
+                  <TextField fullWidth label="विवरण (हिंदी)" value={eventDescHi} onChange={(e) => setEventDescHi(e.target.value)} multiline rows={3} sx={inputSx} />
+                </Box>
+              </Box>
+
+              <Button
+                fullWidth
+                variant="contained"
+                startIcon={<EventIcon />}
+                onClick={handleAddEvent}
+                disabled={!eventTitle || !eventDate}
+                sx={{
+                  background: 'linear-gradient(135deg, #8B1A1A 0%, #a52828 100%)',
+                  color: '#FFD700',
+                  fontWeight: 700,
+                  py: 1.6,
+                  fontSize: '1rem',
+                  borderRadius: 2,
+                  boxShadow: '0 4px 15px rgba(139,26,26,0.4)',
+                  '&:hover': { background: 'linear-gradient(135deg, #a52828 0%, #c03030 100%)', boxShadow: '0 6px 20px rgba(139,26,26,0.6)' },
+                  '&.Mui-disabled': { bgcolor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.3)' },
+                }}
+              >
+                Publish Event
+              </Button>
             </CardContent>
           </Card>
         </TabPanel>

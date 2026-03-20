@@ -14,6 +14,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  InputAdornment,
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -254,14 +255,30 @@ export default function Contact() {
                 border: '1px solid rgba(255,215,0,0.15)',
                 borderRadius: 3,
                 height: '100%',
+                overflow: 'hidden',
               }}
             >
-              <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-                <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700, mb: 3 }}>
+              {/* Decorative form header */}
+              <Box
+                sx={{
+                  background: 'linear-gradient(135deg, rgba(139,26,26,0.55) 0%, rgba(60,5,5,0.55) 100%)',
+                  px: { xs: 3, md: 4 },
+                  py: 3,
+                  textAlign: 'center',
+                  borderBottom: '1px solid rgba(255,215,0,0.1)',
+                }}
+              >
+                <Typography sx={{ fontSize: '2.2rem', lineHeight: 1, mb: 1 }}>🙏</Typography>
+                <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700, mb: 0.5 }}>
                   {t('contact.formTitle')}
                 </Typography>
+                <Typography variant="body2" sx={{ color: 'rgba(255,220,150,0.7)', fontSize: '0.85rem' }}>
+                  Share your thoughts, seek blessings, or ask a question
+                </Typography>
+              </Box>
 
-                <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                   <TextField
                     fullWidth
                     label={t('contact.name')}
@@ -269,6 +286,13 @@ export default function Contact() {
                     value={form.name}
                     onChange={handleChange}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography sx={{ fontSize: '1.1rem' }}>👤</Typography>
+                        </InputAdornment>
+                      ),
+                    }}
                     sx={inputSx}
                   />
                   <TextField
@@ -279,6 +303,13 @@ export default function Contact() {
                     value={form.email}
                     onChange={handleChange}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography sx={{ fontSize: '1.1rem' }}>✉️</Typography>
+                        </InputAdornment>
+                      ),
+                    }}
                     sx={inputSx}
                   />
                   <TextField
@@ -289,25 +320,49 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     multiline
-                    rows={8}
-                    sx={inputSx}
+                    rows={7}
+                    placeholder="Write your message here... 🪔"
+                    sx={{
+                      ...inputSx,
+                      '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.2)', opacity: 1 },
+                    }}
                   />
+
+                  {/* divider */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.1)' }} />
+                    <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.4)' }}>ॐ</Typography>
+                    <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.1)' }} />
+                  </Box>
+
                   <Button
                     type="submit"
                     variant="contained"
                     fullWidth
                     endIcon={<SendIcon />}
                     sx={{
-                      bgcolor: '#8B1A1A',
+                      background: 'linear-gradient(135deg, #8B1A1A 0%, #a52828 100%)',
                       color: '#FFD700',
                       fontWeight: 700,
-                      py: 1.5,
-                      fontSize: '1rem',
-                      '&:hover': { bgcolor: '#a52828' },
+                      py: 1.7,
+                      fontSize: '1.05rem',
+                      borderRadius: 2,
+                      letterSpacing: 0.5,
+                      boxShadow: '0 4px 20px rgba(139,26,26,0.5)',
+                      transition: 'all 0.25s',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #a52828 0%, #c03030 100%)',
+                        boxShadow: '0 6px 28px rgba(139,26,26,0.7)',
+                        transform: 'translateY(-1px)',
+                      },
                     }}
                   >
                     {t('contact.send')}
                   </Button>
+
+                  <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
+                    Your message will be sent directly to our team 🛕
+                  </Typography>
                 </Box>
               </CardContent>
             </Card>

@@ -128,9 +128,6 @@ export default function AdminLoginDialog({ open, onClose }) {
             '& .MuiInputLabel-root.Mui-focused': { color: '#FFD700' },
           }}
         />
-        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', mt: 1 }}>
-          Default: admin / kamakhya@2025
-        </Typography>
       </DialogContent>
 
       <DialogActions sx={{ px: 4, pb: 3, gap: 1 }}>
