@@ -162,41 +162,39 @@ export default function Navbar({ themeColor }) {
               </MenuItem>
             </Menu>
 
-            {/* Admin Controls */}
-            {isAdmin ? (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Chip
-                  icon={<AdminPanelSettingsIcon />}
-                  label={t('nav.adminPanel')}
-                  onClick={() => scrollTo('#admin')}
-                  sx={{
-                    bgcolor: 'rgba(255,215,0,0.2)',
-                    color: '#FFD700',
-                    border: '1px solid rgba(255,215,0,0.4)',
-                    display: { xs: 'none', sm: 'flex' },
-                    cursor: 'pointer',
-                    '&:hover': { bgcolor: 'rgba(255,215,0,0.3)' },
-                  }}
-                />
-                <Tooltip title={t('nav.adminLogout')}>
-                  <IconButton onClick={logout} sx={{ color: 'rgba(255,255,255,0.8)' }}>
-                    <LogoutIcon />
+            {/* Admin Controls — desktop only */}
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1 }}>
+              {isAdmin ? (
+                <>
+                  <Chip
+                    icon={<AdminPanelSettingsIcon />}
+                    label={t('nav.adminPanel')}
+                    onClick={() => scrollTo('#admin')}
+                    sx={{
+                      bgcolor: 'rgba(255,215,0,0.2)',
+                      color: '#FFD700',
+                      border: '1px solid rgba(255,215,0,0.4)',
+                      cursor: 'pointer',
+                      '&:hover': { bgcolor: 'rgba(255,215,0,0.3)' },
+                    }}
+                  />
+                  <Tooltip title={t('nav.adminLogout')}>
+                    <IconButton onClick={logout} sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                      <LogoutIcon />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              ) : (
+                <Tooltip title={t('nav.adminLogin')}>
+                  <IconButton
+                    onClick={() => setLoginOpen(true)}
+                    sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#FFD700' } }}
+                  >
+                    <AdminPanelSettingsIcon />
                   </IconButton>
                 </Tooltip>
-              </Box>
-            ) : (
-              <Tooltip title={t('nav.adminLogin')}>
-                <IconButton
-                  onClick={() => setLoginOpen(true)}
-                  sx={{
-                    color: 'rgba(255,255,255,0.7)',
-                    '&:hover': { color: '#FFD700' },
-                  }}
-                >
-                  <AdminPanelSettingsIcon />
-                </IconButton>
-              </Tooltip>
-            )}
+              )}
+            </Box>
 
             {/* Mobile Menu */}
             <IconButton
@@ -275,19 +273,40 @@ export default function Navbar({ themeColor }) {
             हिंदी
           </Button>
         </Box>
-        {isAdmin && (
-          <Box sx={{ px: 2, pb: 2 }}>
+        <Box sx={{ px: 2, pb: 2 }}>
+          {isAdmin ? (
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<AdminPanelSettingsIcon />}
+                onClick={() => { scrollTo('#admin'); }}
+                sx={{ color: '#FFD700', borderColor: 'rgba(255,215,0,0.5)' }}
+              >
+                {t('nav.adminPanel')}
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<LogoutIcon />}
+                onClick={() => { logout(); setDrawerOpen(false); }}
+                sx={{ color: 'rgba(255,100,100,0.9)', borderColor: 'rgba(255,100,100,0.4)' }}
+              >
+                {t('nav.adminLogout')}
+              </Button>
+            </Box>
+          ) : (
             <Button
               fullWidth
               variant="outlined"
-              startIcon={<LogoutIcon />}
-              onClick={() => { logout(); setDrawerOpen(false); }}
-              sx={{ color: '#FFD700', borderColor: '#FFD700' }}
+              startIcon={<AdminPanelSettingsIcon />}
+              onClick={() => { setDrawerOpen(false); setLoginOpen(true); }}
+              sx={{ color: 'rgba(255,255,255,0.6)', borderColor: 'rgba(255,255,255,0.2)' }}
             >
-              {t('nav.adminLogout')}
+              {t('nav.adminLogin')}
             </Button>
-          </Box>
-        )}
+          )}
+        </Box>
       </Drawer>
 
       <AdminLoginDialog open={loginOpen} onClose={() => setLoginOpen(false)} />

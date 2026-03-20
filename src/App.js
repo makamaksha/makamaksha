@@ -13,6 +13,7 @@ import Events from './components/Events';
 import Contact from './components/Contact';
 import AdminPanel from './components/AdminPanel';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 const darkTheme = createTheme({
   palette: {
@@ -66,6 +67,7 @@ function AppContent() {
         )}
       </Box>
       <Footer themeColor={themeColor} />
+      <ScrollToTop />
     </Box>
   );
 }
