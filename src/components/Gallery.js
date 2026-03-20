@@ -116,7 +116,7 @@ export default function Gallery() {
             ) : (
               <Grid container spacing={2}>
                 {photos.map((photo) => (
-                  <Grid item xs={12} sm={4} key={photo.id}>
+                  <Grid item xs={12} sm={6} md={4} key={photo.id}>
                     <Card
                       sx={{
                         bgcolor: 'rgba(255,255,255,0.04)',
@@ -185,7 +185,7 @@ export default function Gallery() {
             ) : (
               <Grid container spacing={3}>
                 {videos.map((video) => (
-                  <Grid item xs={12} sm={4} key={video.id}>
+                  <Grid item xs={12} sm={6} md={4} key={video.id}>
                     <Card
                       sx={{
                         bgcolor: 'rgba(255,255,255,0.04)',

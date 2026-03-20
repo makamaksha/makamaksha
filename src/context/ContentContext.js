@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState } from 'react';
 
 const ContentContext = createContext();
 
+const CONTENT_VERSION = 'v3';
+
 const defaultEvents = [
   {
     id: 1,
@@ -121,43 +123,56 @@ const defaultPhotos = [
 const defaultVideos = [
   {
     id: 1,
-    url: 'https://www.youtube.com/embed/nCFJq4LKIO0',
-    caption: 'Kamakhya Mandir Darshan',
-    captionHi: 'कामाख्या मंदिर दर्शन',
+    url: 'https://www.youtube.com/embed/94KNE3GapD4',
+    caption: 'Kamakhya Temple Tour — Shakti Peetha',
+    captionHi: 'कामाख्या मंदिर यात्रा — शक्तिपीठ',
     type: 'youtube',
   },
   {
     id: 2,
-    url: 'https://www.youtube.com/embed/Hy9tHBB_EPs',
-    caption: 'Ambubachi Mela at Kamakhya',
-    captionHi: 'कामाख्या में अम्बुबाची मेला',
+    url: 'https://www.youtube.com/embed/KXD2ReVbvHY',
+    caption: 'Maa Kamakhya Darshan 2024',
+    captionHi: 'माँ कामाख्या दर्शन 2024',
     type: 'youtube',
   },
   {
     id: 3,
-    url: 'https://www.youtube.com/embed/4H0oZ0UVBKE',
-    caption: 'Kamakhya Temple Aarti',
-    captionHi: 'कामाख्या मंदिर आरती',
+    url: 'https://www.youtube.com/embed/VDhPXdkP6Js',
+    caption: 'Kamakhya Temple — Guwahati, Assam',
+    captionHi: 'कामाख्या मंदिर — गुवाहाटी, असम',
     type: 'youtube',
   },
   {
     id: 4,
-    url: 'https://www.youtube.com/embed/kx8nqsWmvXw',
-    caption: 'History of Kamakhya Mandir',
-    captionHi: 'कामाख्या मंदिर का इतिहास',
+    url: 'https://www.youtube.com/embed/Ugw4qaLz_nA',
+    caption: 'Kamakhya Devi Mandir Tour Guide',
+    captionHi: 'कामाख्या देवी मंदिर यात्रा गाइड',
     type: 'youtube',
   },
   {
     id: 5,
-    url: 'https://www.youtube.com/embed/WGh4PUKcY0U',
-    caption: 'Navaratri Celebrations at Kamakhya',
-    captionHi: 'कामाख्या में नवरात्रि उत्सव',
+    url: 'https://www.youtube.com/embed/OjjxJcAVNfE',
+    caption: 'Kamakhya Mandir Full Tour Guide',
+    captionHi: 'कामाख्या मंदिर सम्पूर्ण यात्रा',
+    type: 'youtube',
+  },
+  {
+    id: 6,
+    url: 'https://www.youtube.com/embed/Ugw4qaLz_nA',
+    caption: 'Kamakhya Mata — Divine Blessings',
+    captionHi: 'कामाख्या माता — दिव्य आशीर्वाद',
     type: 'youtube',
   },
 ];
 
 export function ContentProvider({ children }) {
   const [photos, setPhotos] = useState(() => {
+    if (localStorage.getItem('kamakhya_version') !== CONTENT_VERSION) {
+      localStorage.removeItem('kamakhya_photos');
+      localStorage.removeItem('kamakhya_videos');
+      localStorage.removeItem('kamakhya_events');
+      localStorage.setItem('kamakhya_version', CONTENT_VERSION);
+    }
     const saved = localStorage.getItem('kamakhya_photos');
     return saved ? JSON.parse(saved) : defaultPhotos;
   });

@@ -16,6 +16,7 @@ const SIGNIFICANCE_ITEMS = [
   { icon: '🪔', key: 'about.significance3' },
   { icon: '❤️', key: 'about.significance4' },
   { icon: '🔱', key: 'about.significance5' },
+  { icon: '🌸', key: 'about.significance6' },
 ];
 
 export default function About() {
