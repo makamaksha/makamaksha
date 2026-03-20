@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Container,
@@ -18,18 +18,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useContent } from '../context/ContentContext';
 
-function VideoCard({ video, isHindi, isAdmin, onDelete }) {
-  const [playing, setPlaying] = useState(false);
+function getVideoId(url) {
+  const m = url.match(/embed\/([^?]+)/);
+  return m ? m[1] : null;
+}
 
-  const getVideoId = (url) => {
-    const m = url.match(/embed\/([^?]+)/);
-    return m ? m[1] : null;
-  };
-
+/* ─── Thumbnail card shown in the grid ─── */
+function VideoCard({ video, isHindi, isAdmin, onDelete, onPlay }) {
   const videoId = video.type === 'youtube' ? getVideoId(video.url) : null;
   const thumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
 
@@ -42,75 +42,72 @@ function VideoCard({ video, isHindi, isAdmin, onDelete }) {
         overflow: 'hidden',
       }}
     >
-      <Box sx={{ position: 'relative', paddingTop: '56.25%' }}>
-        {playing || video.type !== 'youtube' ? (
-          video.type === 'youtube' ? (
-            <iframe
-              title={isHindi ? video.captionHi : video.caption}
-              src={`${video.url}?rel=0&modestbranding=1&autoplay=1&playsinline=1`}
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          ) : (
-            <video
-              src={video.url}
-              controls
-              playsInline
-              autoPlay
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          )
-        ) : (
+      <Box
+        sx={{ position: 'relative', paddingTop: '56.25%', cursor: 'pointer' }}
+        onClick={() => onPlay(video)}
+      >
+        {/* Thumbnail */}
+        <Box
+          sx={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            backgroundImage: thumbnail ? `url(${thumbnail})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            bgcolor: '#1a0000',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            '&:hover .play-btn': { transform: 'scale(1.12)', bgcolor: 'rgba(220,0,0,0.98)' },
+          }}
+        >
+          {/* Dark overlay */}
+          <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.25)' }} />
+
+          {/* Play button */}
           <Box
-            onClick={() => setPlaying(true)}
+            className="play-btn"
             sx={{
-              position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-              cursor: 'pointer',
-              backgroundImage: thumbnail ? `url(${thumbnail})` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              bgcolor: '#1a0000',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              '&:hover .play-btn': { transform: 'scale(1.1)', bgcolor: 'rgba(220,0,0,0.95)' },
+              position: 'relative',
+              width: { xs: 52, md: 60 },
+              height: { xs: 52, md: 60 },
+              borderRadius: '50%',
+              bgcolor: 'rgba(220,0,0,0.88)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.7)',
+              transition: 'all 0.2s',
             }}
           >
             <Box
-              className="play-btn"
               sx={{
-                width: { xs: 48, md: 56 },
-                height: { xs: 48, md: 56 },
-                borderRadius: '50%',
-                bgcolor: 'rgba(220,0,0,0.85)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
-                transition: 'all 0.2s',
+                width: 0, height: 0,
+                borderTop: '11px solid transparent',
+                borderBottom: '11px solid transparent',
+                borderLeft: '20px solid #fff',
+                ml: '5px',
               }}
-            >
-              <Box
-                sx={{
-                  width: 0, height: 0,
-                  borderTop: '10px solid transparent',
-                  borderBottom: '10px solid transparent',
-                  borderLeft: '18px solid #fff',
-                  ml: '4px',
-                }}
-              />
-            </Box>
+            />
           </Box>
-        )}
+
+          {/* Fullscreen hint badge */}
+          <Box
+            sx={{
+              position: 'absolute', bottom: 6, right: 6,
+              bgcolor: 'rgba(0,0,0,0.55)',
+              borderRadius: 1,
+              px: 0.8, py: 0.2,
+              display: 'flex', alignItems: 'center', gap: 0.4,
+            }}
+          >
+            <FullscreenIcon sx={{ color: '#fff', fontSize: '0.9rem' }} />
+            <Typography variant="caption" sx={{ color: '#fff', fontSize: '0.65rem', lineHeight: 1 }}>
+              Tap to play
+            </Typography>
+          </Box>
+        </Box>
       </Box>
+
       <CardContent
         sx={{
           p: 1.5,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           '&:last-child': { pb: 1.5 },
         }}
       >
@@ -127,7 +124,7 @@ function VideoCard({ video, isHindi, isAdmin, onDelete }) {
         {isAdmin && (
           <IconButton
             size="small"
-            onClick={onDelete}
+            onClick={(e) => { e.stopPropagation(); onDelete(); }}
             sx={{ color: 'rgba(255,100,100,0.7)', '&:hover': { color: '#ff4444' } }}
           >
             <DeleteIcon fontSize="small" />
@@ -138,12 +135,144 @@ function VideoCard({ video, isHindi, isAdmin, onDelete }) {
   );
 }
 
+/* ─── Fullscreen video dialog ─── */
+function VideoDialog({ video, isHindi, onClose }) {
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    if (!video) return;
+
+    // Try to lock landscape orientation
+    const lockLandscape = async () => {
+      try {
+        const orient = window.screen && window.screen.orientation;
+        if (orient && orient.lock) {
+          await orient.lock('landscape');
+        }
+      } catch (_) {
+        // Not supported or denied — user can rotate manually
+      }
+    };
+    lockLandscape();
+
+    return () => {
+      // Unlock orientation on close
+      try {
+        const orient = window.screen && window.screen.orientation;
+        if (orient && orient.unlock) {
+          orient.unlock();
+        }
+      } catch (_) {}
+    };
+  }, [video]);
+
+  if (!video) return null;
+
+  const embedSrc =
+    video.type === 'youtube'
+      ? `${video.url}?rel=0&modestbranding=1&autoplay=1&playsinline=1`
+      : null;
+
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      fullScreen
+      PaperProps={{
+        sx: {
+          bgcolor: '#000',
+          m: 0,
+          borderRadius: 0,
+        },
+      }}
+    >
+      {/* Close button */}
+      <IconButton
+        onClick={onClose}
+        sx={{
+          position: 'fixed',
+          top: { xs: 8, md: 16 },
+          right: { xs: 8, md: 16 },
+          zIndex: 10,
+          bgcolor: 'rgba(0,0,0,0.7)',
+          color: '#fff',
+          border: '1px solid rgba(255,255,255,0.3)',
+          '&:hover': { bgcolor: 'rgba(0,0,0,0.9)' },
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+
+      {/* Centred video in black fullscreen */}
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          bgcolor: '#000',
+        }}
+      >
+        {video.type === 'youtube' ? (
+          /* 16:9 box that fills the smaller dimension */
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: '100vw',
+              /* Fit to screen: on landscape mobile this gives full-width 16:9;
+                 on portrait mobile it constrains height */
+              aspectRatio: '16 / 9',
+              maxHeight: '100vh',
+            }}
+          >
+            <iframe
+              ref={iframeRef}
+              title={isHindi ? video.captionHi : video.caption}
+              src={embedSrc}
+              style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </Box>
+        ) : (
+          <video
+            src={video.url}
+            controls
+            autoPlay
+            playsInline
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
+        )}
+      </Box>
+
+      {/* Caption bar at bottom */}
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 0, left: 0, right: 0,
+          bgcolor: 'rgba(0,0,0,0.6)',
+          px: 2, py: 1,
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.85)' }}>
+          {isHindi ? video.captionHi : video.caption}
+        </Typography>
+      </Box>
+    </Dialog>
+  );
+}
+
+/* ─── Main Gallery component ─── */
 export default function Gallery() {
   const { t, i18n } = useTranslation();
   const { isAdmin } = useAuth();
   const { photos, videos, deletePhoto, deleteVideo } = useContent();
   const [tab, setTab] = useState(0);
   const [lightbox, setLightbox] = useState(null);
+  const [playingVideo, setPlayingVideo] = useState(null);
 
   const isHindi = i18n.language === 'hi';
 
@@ -194,11 +323,7 @@ export default function Gallery() {
                 borderRadius: 2,
                 minHeight: 44,
                 px: 3,
-                '&.Mui-selected': {
-                  color: '#1a0000',
-                  bgcolor: '#FFD700',
-                  fontWeight: 700,
-                },
+                '&.Mui-selected': { color: '#1a0000', bgcolor: '#FFD700', fontWeight: 700 },
               }}
             />
             <Tab
@@ -210,11 +335,7 @@ export default function Gallery() {
                 borderRadius: 2,
                 minHeight: 44,
                 px: 3,
-                '&.Mui-selected': {
-                  color: '#1a0000',
-                  bgcolor: '#FFD700',
-                  fontWeight: 700,
-                },
+                '&.Mui-selected': { color: '#1a0000', bgcolor: '#FFD700', fontWeight: 700 },
               }}
             />
           </Tabs>
@@ -240,10 +361,7 @@ export default function Gallery() {
                       overflow: 'hidden',
                       transition: 'all 0.3s',
                       cursor: 'pointer',
-                      '&:hover': {
-                        border: '1px solid rgba(255,215,0,0.4)',
-                        transform: 'scale(1.02)',
-                      },
+                      '&:hover': { border: '1px solid rgba(255,215,0,0.4)', transform: 'scale(1.02)' },
                     }}
                   >
                     <CardMedia
@@ -258,9 +376,7 @@ export default function Gallery() {
                     <CardContent
                       sx={{
                         p: 1.5,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                         '&:last-child': { pb: 1.5 },
                       }}
                     >
@@ -305,6 +421,7 @@ export default function Gallery() {
                     isHindi={isHindi}
                     isAdmin={isAdmin}
                     onDelete={() => deleteVideo(video.id)}
+                    onPlay={setPlayingVideo}
                   />
                 ))}
               </Box>
@@ -313,7 +430,16 @@ export default function Gallery() {
         )}
       </Container>
 
-      {/* Lightbox */}
+      {/* Fullscreen video player */}
+      {playingVideo && (
+        <VideoDialog
+          video={playingVideo}
+          isHindi={isHindi}
+          onClose={() => setPlayingVideo(null)}
+        />
+      )}
+
+      {/* Photo Lightbox */}
       <Dialog
         open={Boolean(lightbox)}
         onClose={() => setLightbox(null)}
@@ -324,11 +450,8 @@ export default function Gallery() {
           <IconButton
             onClick={() => setLightbox(null)}
             sx={{
-              position: 'absolute',
-              top: 8, right: 8,
-              bgcolor: 'rgba(0,0,0,0.7)',
-              color: '#fff',
-              zIndex: 1,
+              position: 'absolute', top: 8, right: 8,
+              bgcolor: 'rgba(0,0,0,0.7)', color: '#fff', zIndex: 1,
               '&:hover': { bgcolor: 'rgba(0,0,0,0.9)' },
             }}
           >
