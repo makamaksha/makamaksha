@@ -20,13 +20,6 @@ import SendIcon from '@mui/icons-material/Send';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import { useTranslation } from 'react-i18next';
 
-const INFO_ITEMS = [
-  { icon: <LocationOnIcon />, labelKey: 'contact.address', valueKey: 'contact.addressValue' },
-  { icon: <PhoneIcon />, labelKey: 'contact.phone', valueKey: 'contact.phoneValue' },
-  { icon: <EmailIcon />, labelKey: 'contact.email', valueKey: 'contact.emailValue' },
-  { icon: <AccessTimeIcon />, labelKey: 'contact.timings', valueKey: 'contact.timingsValue' },
-];
-
 export default function Contact() {
   const { t } = useTranslation();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -59,6 +52,33 @@ export default function Contact() {
     '& .MuiInputLabel-root.Mui-focused': { color: '#FFD700' },
   };
 
+  const INFO = [
+    {
+      icon: <LocationOnIcon sx={{ color: '#FFD700' }} />,
+      label: t('contact.address'),
+      value: t('contact.addressValue'),
+      href: null,
+    },
+    {
+      icon: <PhoneIcon sx={{ color: '#FFD700' }} />,
+      label: t('contact.phone'),
+      value: t('contact.phoneValue'),
+      href: 'tel:+919313715551',
+    },
+    {
+      icon: <EmailIcon sx={{ color: '#FFD700' }} />,
+      label: t('contact.email'),
+      value: t('contact.emailValue'),
+      href: 'mailto:mokshdaynimakamakshadham@gmail.com',
+    },
+    {
+      icon: <AccessTimeIcon sx={{ color: '#FFD700' }} />,
+      label: t('contact.timings'),
+      value: t('contact.timingsValue'),
+      href: null,
+    },
+  ];
+
   return (
     <Box
       id="contact"
@@ -86,107 +106,109 @@ export default function Contact() {
         </Box>
 
         <Grid container spacing={4}>
-          {/* Contact Info */}
-          <Grid item xs={12} md={5}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {INFO_ITEMS.map((item) => (
-                <Card
-                  key={item.labelKey}
-                  sx={{
-                    bgcolor: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,215,0,0.15)',
-                    borderRadius: 2,
-                    transition: 'all 0.3s',
-                    '&:hover': {
-                      border: '1px solid rgba(255,215,0,0.4)',
-                      bgcolor: 'rgba(255,215,0,0.05)',
-                    },
-                  }}
-                >
-                  <CardContent sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, py: 2, '&:last-child': { pb: 2 } }}>
-                    <Box
-                      sx={{
-                        color: '#FFD700',
-                        bgcolor: 'rgba(255,215,0,0.1)',
-                        borderRadius: '50%',
-                        p: 1,
-                        display: 'flex',
-                        flexShrink: 0,
-                      }}
-                    >
-                      {item.icon}
-                    </Box>
-                    <Box>
-                      <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.7)', display: 'block', mb: 0.3 }}>
-                        {t(item.labelKey)}
-                      </Typography>
-                      {item.labelKey === 'contact.phone' ? (
-                        <Typography
-                          component="a"
-                          href="tel:+919313715551"
-                          variant="body2"
-                          sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, textDecoration: 'none', '&:hover': { color: '#FFD700' } }}
-                        >
-                          {t(item.valueKey)}
-                        </Typography>
-                      ) : item.labelKey === 'contact.email' ? (
-                        <Typography
-                          component="a"
-                          href="mailto:mokshdaynimakamakshadham@gmail.com"
-                          variant="body2"
-                          sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, textDecoration: 'none', wordBreak: 'break-all', '&:hover': { color: '#FFD700' } }}
-                        >
-                          {t(item.valueKey)}
-                        </Typography>
-                      ) : (
-                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6 }}>
-                          {t(item.valueKey)}
-                        </Typography>
-                      )}
-                    </Box>
-                  </CardContent>
-                </Card>
-              ))}
-
-              {/* Google Maps */}
-              <Box sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(255,215,0,0.2)' }}>
-                <iframe
-                  title="Maa Kamakhya Mandir Location"
-                  src="https://maps.google.com/maps?q=JG-1+62B+Vikaspuri+New+Delhi+110018&output=embed"
-                  width="100%"
-                  height="200"
-                  style={{ border: 0, display: 'block' }}
-                  allowFullScreen=""
-                  loading="lazy"
-                />
-              </Box>
-              <Button
-                variant="outlined"
-                fullWidth
-                startIcon={<DirectionsIcon />}
-                href="https://www.google.com/maps/dir/?api=1&destination=JG-1+62B+Vikaspuri+New+Delhi+110018"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  color: '#FFD700',
-                  borderColor: 'rgba(255,215,0,0.5)',
-                  fontWeight: 600,
-                  py: 1.2,
-                  '&:hover': { bgcolor: 'rgba(255,215,0,0.08)', borderColor: '#FFD700' },
-                }}
-              >
-                Get Directions on Google Maps
-              </Button>
-            </Box>
-          </Grid>
-
-          {/* Contact Form */}
-          <Grid item xs={12} md={7}>
+          {/* LEFT — Address & Map */}
+          <Grid item xs={12} md={6}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,215,0,0.15)',
                 borderRadius: 3,
+                height: '100%',
+              }}
+            >
+              <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700, mb: 3 }}>
+                  🛕 Maa Kamakhya Mandir
+                </Typography>
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, mb: 3 }}>
+                  {INFO.map((item) => (
+                    <Box key={item.label} sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+                      <Box
+                        sx={{
+                          bgcolor: 'rgba(255,215,0,0.1)',
+                          borderRadius: '50%',
+                          p: 1,
+                          display: 'flex',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {item.icon}
+                      </Box>
+                      <Box>
+                        <Typography
+                          variant="caption"
+                          sx={{ color: 'rgba(255,215,0,0.7)', display: 'block', mb: 0.3, textTransform: 'uppercase', letterSpacing: 1 }}
+                        >
+                          {item.label}
+                        </Typography>
+                        {item.href ? (
+                          <Typography
+                            component="a"
+                            href={item.href}
+                            variant="body2"
+                            sx={{
+                              color: 'rgba(255,255,255,0.85)',
+                              lineHeight: 1.6,
+                              textDecoration: 'none',
+                              wordBreak: 'break-all',
+                              '&:hover': { color: '#FFD700' },
+                            }}
+                          >
+                            {item.value}
+                          </Typography>
+                        ) : (
+                          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6 }}>
+                            {item.value}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+
+                {/* Google Maps */}
+                <Box sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(255,215,0,0.2)', mb: 2 }}>
+                  <iframe
+                    title="Maa Kamakhya Mandir Location"
+                    src="https://maps.google.com/maps?q=JG-1+62B+Vikaspuri+New+Delhi+110018&output=embed"
+                    width="100%"
+                    height="200"
+                    style={{ border: 0, display: 'block' }}
+                    allowFullScreen=""
+                    loading="lazy"
+                  />
+                </Box>
+
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  startIcon={<DirectionsIcon />}
+                  href="https://www.google.com/maps/dir/?api=1&destination=JG-1+62B+Vikaspuri+New+Delhi+110018"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    color: '#FFD700',
+                    borderColor: 'rgba(255,215,0,0.5)',
+                    fontWeight: 600,
+                    py: 1.2,
+                    '&:hover': { bgcolor: 'rgba(255,215,0,0.08)', borderColor: '#FFD700' },
+                  }}
+                >
+                  Get Directions on Google Maps
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* RIGHT — Contact Form */}
+          <Grid item xs={12} md={6}>
+            <Card
+              sx={{
+                bgcolor: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,215,0,0.15)',
+                borderRadius: 3,
+                height: '100%',
               }}
             >
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
@@ -196,7 +218,7 @@ export default function Contact() {
 
                 <Box component="form" onSubmit={handleSubmit}>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12}>
                       <TextField
                         fullWidth
                         label={t('contact.name')}
@@ -207,7 +229,7 @@ export default function Contact() {
                         sx={inputSx}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12}>
                       <TextField
                         fullWidth
                         label={t('contact.emailField')}
@@ -228,7 +250,7 @@ export default function Contact() {
                         onChange={handleChange}
                         required
                         multiline
-                        rows={5}
+                        rows={7}
                         sx={inputSx}
                       />
                     </Grid>

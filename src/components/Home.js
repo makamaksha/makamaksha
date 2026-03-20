@@ -5,8 +5,6 @@ import {
   Typography,
   Button,
   Grid,
-  Card,
-  CardContent,
   Divider,
 } from '@mui/material';
 import TempleHinduIcon from '@mui/icons-material/TempleHindu';
@@ -14,13 +12,6 @@ import StarIcon from '@mui/icons-material/Star';
 import PeopleIcon from '@mui/icons-material/People';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import { useTranslation } from 'react-i18next';
-
-const HIGHLIGHTS = [
-  { iconKey: '🪔', titleKey: 'home.h1Title', descKey: 'home.h1Desc' },
-  { iconKey: '🕉️', titleKey: 'home.h2Title', descKey: 'home.h2Desc' },
-  { iconKey: '⏰', titleKey: 'home.h4Title', descKey: 'home.h4Desc' },
-  { iconKey: '🌸', titleKey: 'home.h5Title', descKey: 'home.h5Desc' },
-];
 
 const STATS = [
   { valueKey: 'home.stat1', labelKey: 'home.stat1Label', icon: <TempleHinduIcon />, value: '8th C.' },
@@ -242,53 +233,6 @@ export default function Home({ themeColor }) {
         </Container>
       </Box>
 
-      {/* Highlights Section */}
-      <Box sx={{ bgcolor: '#110000', py: { xs: 6, md: 10 } }}>
-        <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography
-              variant="h3"
-              sx={{ color: '#fff', fontWeight: 700, mb: 1, fontSize: { xs: '1.8rem', md: '2.5rem' } }}
-            >
-              {t('home.highlights')}
-            </Typography>
-            <Divider sx={{ width: 60, borderColor: '#FFD700', borderWidth: 2, mx: 'auto' }} />
-          </Box>
-          <Grid container spacing={3}>
-            {HIGHLIGHTS.map((item, i) => (
-              <Grid item xs={12} sm={6} key={i}>
-                <Card
-                  sx={{
-                    bgcolor: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,215,0,0.15)',
-                    borderRadius: 3,
-                    height: '100%',
-                    transition: 'all 0.3s',
-                    '&:hover': {
-                      border: '1px solid rgba(255,215,0,0.4)',
-                      bgcolor: 'rgba(255,215,0,0.06)',
-                      transform: 'translateY(-4px)',
-                    },
-                  }}
-                >
-                  <CardContent sx={{ p: 3 }}>
-                    <Typography sx={{ fontSize: '2.5rem', mb: 1.5 }}>{item.iconKey}</Typography>
-                    <Typography
-                      variant="h6"
-                      sx={{ color: '#FFD700', fontWeight: 700, mb: 1 }}
-                    >
-                      {t(item.titleKey)}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.7 }}>
-                      {t(item.descKey)}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
     </Box>
   );
 }

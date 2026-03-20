@@ -148,22 +148,6 @@ export default function Footer({ themeColor }) {
               ))}
             </Box>
 
-            {/* Temple Hours */}
-            <Box
-              sx={{
-                bgcolor: 'rgba(255,215,0,0.05)',
-                border: '1px solid rgba(255,215,0,0.15)',
-                borderRadius: 2,
-                p: 1.5,
-              }}
-            >
-              <Typography variant="caption" sx={{ color: '#FFD700', display: 'block', fontWeight: 600, mb: 0.5 }}>
-                ⏰ Temple Hours
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.6)' }}>
-                5:30 AM – 10:00 PM (All Days)
-              </Typography>
-            </Box>
           </Grid>
         </Grid>
 
