@@ -17,6 +17,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SendIcon from '@mui/icons-material/Send';
+import DirectionsIcon from '@mui/icons-material/Directions';
 import { useTranslation } from 'react-i18next';
 
 const INFO_ITEMS = [
@@ -35,6 +36,14 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const subject = encodeURIComponent(`Message from ${form.name} — Maa Kamakhya Mandir Website`);
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
+    );
+    window.open(
+      `mailto:mokshdaynimakamakshadham@gmail.com?subject=${subject}&body=${body}`,
+      '_blank'
+    );
     setSuccess(true);
     setForm({ name: '', email: '', message: '' });
   };
@@ -111,13 +120,63 @@ export default function Contact() {
                       <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.7)', display: 'block', mb: 0.3 }}>
                         {t(item.labelKey)}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6 }}>
-                        {t(item.valueKey)}
-                      </Typography>
+                      {item.labelKey === 'contact.phone' ? (
+                        <Typography
+                          component="a"
+                          href="tel:+919313715551"
+                          variant="body2"
+                          sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, textDecoration: 'none', '&:hover': { color: '#FFD700' } }}
+                        >
+                          {t(item.valueKey)}
+                        </Typography>
+                      ) : item.labelKey === 'contact.email' ? (
+                        <Typography
+                          component="a"
+                          href="mailto:mokshdaynimakamakshadham@gmail.com"
+                          variant="body2"
+                          sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, textDecoration: 'none', wordBreak: 'break-all', '&:hover': { color: '#FFD700' } }}
+                        >
+                          {t(item.valueKey)}
+                        </Typography>
+                      ) : (
+                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6 }}>
+                          {t(item.valueKey)}
+                        </Typography>
+                      )}
                     </Box>
                   </CardContent>
                 </Card>
               ))}
+
+              {/* Google Maps */}
+              <Box sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(255,215,0,0.2)' }}>
+                <iframe
+                  title="Maa Kamakhya Mandir Location"
+                  src="https://maps.google.com/maps?q=JG-1+62B+Vikaspuri+New+Delhi+110018&output=embed"
+                  width="100%"
+                  height="200"
+                  style={{ border: 0, display: 'block' }}
+                  allowFullScreen=""
+                  loading="lazy"
+                />
+              </Box>
+              <Button
+                variant="outlined"
+                fullWidth
+                startIcon={<DirectionsIcon />}
+                href="https://www.google.com/maps/dir/?api=1&destination=JG-1+62B+Vikaspuri+New+Delhi+110018"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  color: '#FFD700',
+                  borderColor: 'rgba(255,215,0,0.5)',
+                  fontWeight: 600,
+                  py: 1.2,
+                  '&:hover': { bgcolor: 'rgba(255,215,0,0.08)', borderColor: '#FFD700' },
+                }}
+              >
+                Get Directions on Google Maps
+              </Button>
             </Box>
           </Grid>
 

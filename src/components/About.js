@@ -11,13 +11,14 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Chip,
+  Button,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import FlightIcon from '@mui/icons-material/Flight';
-import TrainIcon from '@mui/icons-material/Train';
+import DirectionsIcon from '@mui/icons-material/Directions';
+import SubwayIcon from '@mui/icons-material/Subway';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import FlightIcon from '@mui/icons-material/Flight';
 import { useTranslation } from 'react-i18next';
 
 const SIGNIFICANCE = [
@@ -30,13 +31,8 @@ const SIGNIFICANCE = [
 
 const TRAVEL = [
   { icon: <FlightIcon />, key: 'about.byAir' },
-  { icon: <TrainIcon />, key: 'about.byTrain' },
+  { icon: <SubwayIcon />, key: 'about.byTrain' },
   { icon: <DirectionsBusIcon />, key: 'about.byRoad' },
-];
-
-const MAHAVIDYAS = [
-  'Kali', 'Tara', 'Sodashi', 'Bhuvaneshwari', 'Bhairavi',
-  'Chhinnamasta', 'Dhumavati', 'Bagalamukhi', 'Matangi', 'Kamala',
 ];
 
 export default function About() {
@@ -102,7 +98,7 @@ export default function About() {
             </Card>
           </Grid>
 
-          {/* Architecture */}
+          {/* About Mata Kamakhya Devi */}
           <Grid item xs={12} md={5}>
             <Card
               sx={{
@@ -114,36 +110,43 @@ export default function About() {
             >
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
-                  <Typography sx={{ fontSize: '2rem' }}>🛕</Typography>
+                  <Typography sx={{ fontSize: '2rem' }}>🌸</Typography>
                   <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700 }}>
                     {t('about.architectureTitle')}
                   </Typography>
                 </Box>
                 <Typography
                   variant="body1"
-                  sx={{ color: 'rgba(255,255,255,0.8)', lineHeight: 1.8, mb: 3 }}
+                  sx={{ color: 'rgba(255,255,255,0.8)', lineHeight: 1.8 }}
                 >
                   {t('about.architectureDesc')}
                 </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
 
-                <Typography variant="subtitle2" sx={{ color: '#FFD700', mb: 1.5 }}>
-                  10 Mahavidya Temples:
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8 }}>
-                  {MAHAVIDYAS.map((m) => (
-                    <Chip
-                      key={m}
-                      label={m}
-                      size="small"
-                      sx={{
-                        bgcolor: 'rgba(139,26,26,0.4)',
-                        color: 'rgba(255,220,150,0.9)',
-                        border: '1px solid rgba(255,215,0,0.2)',
-                        fontSize: '0.7rem',
-                      }}
-                    />
-                  ))}
+          {/* Saturday Kirtan & Divine Prasad */}
+          <Grid item xs={12}>
+            <Card
+              sx={{
+                bgcolor: 'rgba(139,26,26,0.15)',
+                border: '1px solid rgba(255,215,0,0.35)',
+                borderRadius: 3,
+              }}
+            >
+              <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Typography sx={{ fontSize: '2rem' }}>🪔</Typography>
+                  <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700 }}>
+                    {t('about.kirtanTitle')}
+                  </Typography>
                 </Box>
+                <Typography
+                  variant="body1"
+                  sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.9, fontSize: { xs: '0.95rem', md: '1rem' } }}
+                >
+                  {t('about.kirtanDesc')}
+                </Typography>
               </CardContent>
             </Card>
           </Grid>
@@ -240,18 +243,36 @@ export default function About() {
                   ))}
                 </List>
 
-                {/* Google Maps Embed */}
+                {/* Google Maps Embed — Vikaspuri, New Delhi */}
                 <Box sx={{ mt: 3, borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(255,215,0,0.2)' }}>
                   <iframe
-                    title="Kamakhya Temple Location"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.735482025093!2d91.63879387540266!3d26.166200677096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a5a1b3c7b4b35%3A0x56e7e53dc1e08f8f!2sKamakhya%20Temple!5e0!3m2!1sen!2sin!4v1698761234567!5m2!1sen!2sin"
+                    title="Maa Kamakhya Mandir, Vikaspuri New Delhi"
+                    src="https://maps.google.com/maps?q=JG-1+62B+Vikaspuri+New+Delhi+110018&output=embed"
                     width="100%"
-                    height="200"
+                    height="220"
                     style={{ border: 0, display: 'block' }}
                     allowFullScreen=""
                     loading="lazy"
                   />
                 </Box>
+
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  startIcon={<DirectionsIcon />}
+                  href="https://www.google.com/maps/dir/?api=1&destination=JG-1+62B+Vikaspuri+New+Delhi+110018"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    mt: 2,
+                    color: '#FFD700',
+                    borderColor: 'rgba(255,215,0,0.5)',
+                    fontWeight: 600,
+                    '&:hover': { bgcolor: 'rgba(255,215,0,0.08)', borderColor: '#FFD700' },
+                  }}
+                >
+                  {t('about.getDirections')}
+                </Button>
               </CardContent>
             </Card>
           </Grid>
