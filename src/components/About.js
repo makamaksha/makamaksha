@@ -154,7 +154,7 @@ export default function About() {
           </Grid>
 
           {/* Significance */}
-          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+          <Grid item xs={12} sx={{ display: 'flex' }}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',
@@ -193,7 +193,7 @@ export default function About() {
           </Grid>
 
           {/* Location */}
-          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+          <Grid item xs={12} sx={{ display: 'flex' }}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',

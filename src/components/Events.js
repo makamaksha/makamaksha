@@ -143,7 +143,7 @@ export default function Events() {
             {filtered.map((event) => {
               const upcoming = isUpcoming(event.endDate || event.date);
               return (
-                <Grid item xs={12} sm={6} md={4} key={event.id} sx={{ display: 'flex' }}>
+                <Grid item xs={12} md={6} key={event.id} sx={{ display: 'flex' }}>
                   <Card
                     sx={{
                       bgcolor: 'rgba(255,255,255,0.04)',

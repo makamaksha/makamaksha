@@ -138,7 +138,7 @@ export default function Gallery() {
                         alt={isHindi ? photo.captionHi : photo.caption}
                         onClick={() => setLightbox(photo)}
                         sx={{ objectFit: 'cover' }}
-                        onError={(e) => { e.target.src = 'https://via.placeholder.com/400x220/1a0000/FFD700?text=Image+Not+Found'; }}
+                        onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='220'%3E%3Crect width='400' height='220' fill='%231a0000'/%3E%3Ctext x='50%25' y='50%25' fill='%23FFD700' text-anchor='middle' dy='.3em' font-size='14' font-family='sans-serif'%3E%F0%9F%9B%95 Image Not Available%3C/text%3E%3C/svg%3E"; }}
                       />
                       <CardContent
                         sx={{
@@ -292,7 +292,7 @@ export default function Gallery() {
                 src={lightbox.url}
                 alt={isHindi ? lightbox.captionHi : lightbox.caption}
                 style={{ maxWidth: '90vw', maxHeight: '85vh', display: 'block' }}
-                onError={(e) => { e.target.src = 'https://via.placeholder.com/800x600/1a0000/FFD700?text=Image+Not+Found'; }}
+                onError={(e) => { e.target.onerror = null; e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%231a0000'/%3E%3Ctext x='50%25' y='50%25' fill='%23FFD700' text-anchor='middle' dy='.3em' font-size='18' font-family='sans-serif'%3E%F0%9F%9B%95 Image Not Available%3C/text%3E%3C/svg%3E"; }}
               />
               <Box sx={{ p: 2, textAlign: 'center' }}>
                 <Typography variant="body2" sx={{ color: 'rgba(255,215,0,0.8)' }}>
