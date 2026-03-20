@@ -147,7 +147,7 @@ export default function About() {
             </Box>
             <Grid container spacing={3}>
               {SIGNIFICANCE_ITEMS.map((item) => (
-                <Grid item xs={12} sm={6} md={4} key={item.key} sx={{ display: 'flex' }}>
+                <Grid item xs={12} sm={4} md={4} key={item.key} sx={{ display: 'flex' }}>
                   <Card
                     sx={{
                       bgcolor: 'rgba(139,26,26,0.12)',
