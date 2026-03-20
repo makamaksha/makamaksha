@@ -143,20 +143,16 @@ export default function Events() {
             {filtered.map((event) => {
               const upcoming = isUpcoming(event.endDate || event.date);
               return (
-                <Grid item xs={12} md={6} key={event.id} sx={{ display: 'flex' }}>
+                <Grid item xs={12} key={event.id}>
                   <Card
                     sx={{
                       bgcolor: 'rgba(255,255,255,0.04)',
                       border: `1px solid ${upcoming ? 'rgba(255,215,0,0.25)' : 'rgba(255,255,255,0.08)'}`,
                       borderRadius: 3,
-                      height: '100%',
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
                       transition: 'all 0.3s',
                       '&:hover': {
                         border: `1px solid ${upcoming ? 'rgba(255,215,0,0.5)' : 'rgba(255,255,255,0.2)'}`,
-                        transform: 'translateY(-4px)',
+                        transform: 'translateY(-2px)',
                       },
                     }}
                   >

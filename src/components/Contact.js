@@ -11,6 +11,10 @@ import {
   Divider,
   Alert,
   Snackbar,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -18,7 +22,16 @@ import EmailIcon from '@mui/icons-material/Email';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SendIcon from '@mui/icons-material/Send';
 import DirectionsIcon from '@mui/icons-material/Directions';
+import FlightIcon from '@mui/icons-material/Flight';
+import SubwayIcon from '@mui/icons-material/Subway';
+import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import { useTranslation } from 'react-i18next';
+
+const TRAVEL = [
+  { icon: <FlightIcon sx={{ color: '#FFD700', fontSize: '1.1rem' }} />, key: 'about.byAir' },
+  { icon: <SubwayIcon sx={{ color: '#FFD700', fontSize: '1.1rem' }} />, key: 'about.byTrain' },
+  { icon: <DirectionsBusIcon sx={{ color: '#FFD700', fontSize: '1.1rem' }} />, key: 'about.byRoad' },
+];
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -86,7 +99,7 @@ export default function Contact() {
     >
       <Container maxWidth="lg">
         {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
+        <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography
             variant="overline"
             sx={{ color: '#FFD700', letterSpacing: 4, display: 'block', mb: 1 }}
@@ -105,16 +118,23 @@ export default function Contact() {
           <Divider sx={{ width: 60, borderColor: '#FFD700', borderWidth: 2, mx: 'auto', mt: 3 }} />
         </Box>
 
-        <Grid container spacing={4} alignItems="stretch">
-          {/* LEFT — Address & Map */}
-          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+        {/* 2-Column Layout using Flexbox for guaranteed side-by-side */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 4,
+            alignItems: 'stretch',
+          }}
+        >
+          {/* LEFT — Location, Address, How to Reach, Map */}
+          <Box sx={{ flex: 1, minWidth: 0 }}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,215,0,0.15)',
                 borderRadius: 3,
                 height: '100%',
-                width: '100%',
               }}
             >
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
@@ -122,6 +142,7 @@ export default function Contact() {
                   🛕 Maa Kamakhya Mandir
                 </Typography>
 
+                {/* Contact Info */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, mb: 3 }}>
                   {INFO.map((item) => (
                     <Box key={item.label} sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
@@ -168,6 +189,30 @@ export default function Contact() {
                   ))}
                 </Box>
 
+                <Divider sx={{ borderColor: 'rgba(255,215,0,0.1)', mb: 2.5 }} />
+
+                {/* How to Reach */}
+                <Typography variant="subtitle2" sx={{ color: '#FFD700', fontWeight: 700, mb: 1.5, letterSpacing: 1, textTransform: 'uppercase' }}>
+                  📍 {t('about.locationTitle')}
+                </Typography>
+                <List dense disablePadding sx={{ mb: 3 }}>
+                  {TRAVEL.map((item) => (
+                    <ListItem key={item.key} disableGutters sx={{ py: 0.7 }}>
+                      <ListItemIcon sx={{ minWidth: 34 }}>
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={t(item.key)}
+                        primaryTypographyProps={{
+                          color: 'rgba(255,255,255,0.75)',
+                          fontSize: '0.88rem',
+                          lineHeight: 1.5,
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+
                 {/* Google Maps */}
                 <Box sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(255,215,0,0.2)', mb: 2 }}>
                   <iframe
@@ -200,17 +245,16 @@ export default function Contact() {
                 </Button>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
 
-          {/* RIGHT — Contact Form */}
-          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+          {/* RIGHT — Send Message Form */}
+          <Box sx={{ flex: 1, minWidth: 0 }}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,215,0,0.15)',
                 borderRadius: 3,
                 height: '100%',
-                width: '100%',
               }}
             >
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
@@ -218,68 +262,58 @@ export default function Contact() {
                   {t('contact.formTitle')}
                 </Typography>
 
-                <Box component="form" onSubmit={handleSubmit}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label={t('contact.name')}
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        required
-                        sx={inputSx}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label={t('contact.emailField')}
-                        name="email"
-                        type="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        required
-                        sx={inputSx}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label={t('contact.message')}
-                        name="message"
-                        value={form.message}
-                        onChange={handleChange}
-                        required
-                        multiline
-                        rows={7}
-                        sx={inputSx}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        fullWidth
-                        endIcon={<SendIcon />}
-                        sx={{
-                          bgcolor: '#8B1A1A',
-                          color: '#FFD700',
-                          fontWeight: 700,
-                          py: 1.5,
-                          fontSize: '1rem',
-                          '&:hover': { bgcolor: '#a52828' },
-                        }}
-                      >
-                        {t('contact.send')}
-                      </Button>
-                    </Grid>
-                  </Grid>
+                <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <TextField
+                    fullWidth
+                    label={t('contact.name')}
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    required
+                    sx={inputSx}
+                  />
+                  <TextField
+                    fullWidth
+                    label={t('contact.emailField')}
+                    name="email"
+                    type="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                    sx={inputSx}
+                  />
+                  <TextField
+                    fullWidth
+                    label={t('contact.message')}
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    required
+                    multiline
+                    rows={8}
+                    sx={inputSx}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    endIcon={<SendIcon />}
+                    sx={{
+                      bgcolor: '#8B1A1A',
+                      color: '#FFD700',
+                      fontWeight: 700,
+                      py: 1.5,
+                      fontSize: '1rem',
+                      '&:hover': { bgcolor: '#a52828' },
+                    }}
+                  >
+                    {t('contact.send')}
+                  </Button>
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Container>
 
       <Snackbar
