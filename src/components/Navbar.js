@@ -94,7 +94,7 @@ export default function Navbar({ themeColor }) {
                 variant="caption"
                 sx={{ color: 'rgba(255,220,150,0.85)', fontSize: '0.65rem' }}
               >
-                Guwahati, Assam
+                Vikaspuri, New Delhi
               </Typography>
             </Box>
           </Box>

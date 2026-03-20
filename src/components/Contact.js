@@ -107,7 +107,7 @@ export default function Contact() {
 
         <Grid container spacing={4}>
           {/* LEFT — Address & Map */}
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sm={6}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',
@@ -202,7 +202,7 @@ export default function Contact() {
           </Grid>
 
           {/* RIGHT — Contact Form */}
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sm={6}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',

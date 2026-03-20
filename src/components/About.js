@@ -66,13 +66,14 @@ export default function About() {
 
         <Grid container spacing={4}>
           {/* History */}
-          <Grid item xs={12} md={7}>
+          <Grid item xs={12} md={7} sx={{ display: 'flex' }}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,215,0,0.15)',
                 borderRadius: 3,
                 height: '100%',
+                width: '100%',
               }}
             >
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
@@ -99,13 +100,14 @@ export default function About() {
           </Grid>
 
           {/* About Mata Kamakhya Devi */}
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={5} sx={{ display: 'flex' }}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,215,0,0.15)',
                 borderRadius: 3,
                 height: '100%',
+                width: '100%',
               }}
             >
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
@@ -152,13 +154,14 @@ export default function About() {
           </Grid>
 
           {/* Significance */}
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,215,0,0.15)',
                 borderRadius: 3,
                 height: '100%',
+                width: '100%',
               }}
             >
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
@@ -190,13 +193,14 @@ export default function About() {
           </Grid>
 
           {/* Location */}
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
             <Card
               sx={{
                 bgcolor: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,215,0,0.15)',
                 borderRadius: 3,
                 height: '100%',
+                width: '100%',
               }}
             >
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
