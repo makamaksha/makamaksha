@@ -24,12 +24,18 @@ import { useTranslation } from 'react-i18next';
 import { useContent } from '../context/ContentContext';
 
 const THEME_COLORS = [
-  { label: 'Deep Red', value: '#8B1A1A' },
-  { label: 'Maroon', value: '#800000' },
-  { label: 'Dark Purple', value: '#4A0E4E' },
-  { label: 'Deep Blue', value: '#0D2137' },
-  { label: 'Forest Green', value: '#1B4332' },
-  { label: 'Deep Orange', value: '#7C2D12' },
+  { label: 'Deep Red', value: '#8B1A1A', emoji: '🔴' },
+  { label: 'Crimson', value: '#A50000', emoji: '❤️' },
+  { label: 'Maroon', value: '#800000', emoji: '🍷' },
+  { label: 'Deep Orange', value: '#7C2D12', emoji: '🟠' },
+  { label: 'Saffron', value: '#9C4100', emoji: '🧡' },
+  { label: 'Gold Brown', value: '#7A4E00', emoji: '🟡' },
+  { label: 'Dark Purple', value: '#4A0E4E', emoji: '🟣' },
+  { label: 'Royal Violet', value: '#3B0764', emoji: '💜' },
+  { label: 'Indigo', value: '#1E1B4B', emoji: '🔵' },
+  { label: 'Deep Blue', value: '#0D2137', emoji: '🌊' },
+  { label: 'Teal', value: '#0F3460', emoji: '🐬' },
+  { label: 'Forest Green', value: '#1B4332', emoji: '🌿' },
 ];
 
 function TabPanel({ children, value, index }) {
@@ -536,73 +542,198 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
         <TabPanel value={tab} index={3}>
           <Card
             sx={{
-              bgcolor: 'rgba(255,255,255,0.04)',
+              bgcolor: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,215,0,0.2)',
-              borderRadius: 3,
-              maxWidth: 600,
+              borderRadius: 4,
+              maxWidth: 680,
               mx: 'auto',
+              overflow: 'hidden',
             }}
           >
-            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-              <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700, mb: 1 }}>
-                🎨 {t('admin.themeColor')}
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', mb: 3 }}>
-                Select a theme color to customize the Navbar and accent elements
-              </Typography>
+            {/* Header band */}
+            <Box sx={{ background: 'linear-gradient(135deg, rgba(139,26,26,0.6) 0%, rgba(80,10,10,0.6) 100%)', px: 4, py: 2.5, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Typography sx={{ fontSize: 28 }}>🎨</Typography>
+              <Box>
+                <Typography variant="h6" sx={{ color: '#FFD700', fontWeight: 700, lineHeight: 1.2 }}>
+                  {t('admin.themeColor')}
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'rgba(255,220,150,0.7)' }}>
+                  Customise Navbar and accent colours
+                </Typography>
+              </Box>
+            </Box>
 
-              <Grid container spacing={2}>
-                {THEME_COLORS.map((c) => (
-                  <Grid item xs={6} sm={4} key={c.value}>
+            <CardContent sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 3 }}>
+
+              {/* Live preview bar */}
+              <Box
+                sx={{
+                  borderRadius: 2,
+                  overflow: 'hidden',
+                  border: '1px solid rgba(255,215,0,0.2)',
+                  boxShadow: `0 4px 20px ${themeColor}55`,
+                }}
+              >
+                <Box
+                  sx={{
+                    background: `linear-gradient(135deg, ${themeColor} 0%, ${themeColor}99 100%)`,
+                    px: 3,
+                    py: 1.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                  }}
+                >
+                  <Typography sx={{ fontSize: '1.3rem' }}>🛕</Typography>
+                  <Box>
+                    <Typography sx={{ color: '#FFD700', fontWeight: 700, fontSize: '0.95rem', lineHeight: 1.1 }}>
+                      Maa Kamakhya Mandir
+                    </Typography>
+                    <Typography sx={{ color: 'rgba(255,220,150,0.8)', fontSize: '0.65rem' }}>
+                      Vikaspuri, New Delhi
+                    </Typography>
+                  </Box>
+                  <Typography variant="caption" sx={{ ml: 'auto', color: 'rgba(255,255,255,0.5)', fontSize: '0.65rem' }}>
+                    ← Navbar preview
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* Colour picker section */}
+              <Box>
+                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.7)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', display: 'block', mb: 2 }}>
+                  🎨 Pick any colour
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    p: 2.5,
+                    borderRadius: 3,
+                    border: '1px solid rgba(255,215,0,0.2)',
+                    bgcolor: 'rgba(255,255,255,0.03)',
+                  }}
+                >
+                  {/* Large colour picker swatch */}
+                  <Box sx={{ position: 'relative', flexShrink: 0 }}>
                     <Box
-                      onClick={() => onThemeChange(c.value)}
                       sx={{
-                        bgcolor: c.value,
-                        borderRadius: 2,
-                        p: 2,
-                        textAlign: 'center',
+                        width: 72,
+                        height: 72,
+                        borderRadius: 2.5,
+                        bgcolor: themeColor,
+                        border: '3px solid rgba(255,215,0,0.5)',
+                        boxShadow: `0 0 20px ${themeColor}88`,
                         cursor: 'pointer',
-                        border: themeColor === c.value ? '3px solid #FFD700' : '3px solid transparent',
-                        transition: 'all 0.2s',
-                        '&:hover': { opacity: 0.85, transform: 'scale(1.05)' },
+                        overflow: 'hidden',
+                        position: 'relative',
+                        '&:hover': { opacity: 0.9 },
                       }}
                     >
-                      <Typography variant="body2" sx={{ color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>
-                        {c.label}
-                      </Typography>
-                      {themeColor === c.value && (
-                        <Typography variant="caption" sx={{ color: '#FFD700' }}>✓ Active</Typography>
-                      )}
+                      <input
+                        type="color"
+                        value={themeColor}
+                        onChange={(e) => onThemeChange(e.target.value)}
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          width: '100%',
+                          height: '100%',
+                          opacity: 0,
+                          cursor: 'pointer',
+                          border: 'none',
+                          padding: 0,
+                        }}
+                      />
                     </Box>
-                  </Grid>
-                ))}
-              </Grid>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', textAlign: 'center', mt: 0.5, fontSize: '0.6rem' }}>
+                      Click to pick
+                    </Typography>
+                  </Box>
 
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)', display: 'block', mb: 1 }}>
-                  Custom Color (hex):
+                  <Box sx={{ flex: 1 }}>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)', display: 'block', mb: 0.8 }}>
+                      Hex code
+                    </Typography>
+                    <TextField
+                      size="small"
+                      fullWidth
+                      value={themeColor}
+                      onChange={(e) => onThemeChange(e.target.value)}
+                      placeholder="#8B1A1A"
+                      inputProps={{ style: { fontFamily: 'monospace', fontSize: '1rem', letterSpacing: 2 } }}
+                      sx={inputSx}
+                    />
+                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', mt: 0.8, display: 'block' }}>
+                      Click the swatch or type a hex value
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+
+              <Divider sx={{ borderColor: 'rgba(255,215,0,0.1)' }} />
+
+              {/* Preset swatches */}
+              <Box>
+                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.7)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', display: 'block', mb: 2 }}>
+                  ✨ Preset themes
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                  <input
-                    type="color"
-                    value={themeColor}
-                    onChange={(e) => onThemeChange(e.target.value)}
-                    style={{
-                      width: 48,
-                      height: 48,
-                      border: 'none',
-                      borderRadius: 8,
-                      cursor: 'pointer',
-                      background: 'transparent',
-                    }}
-                  />
-                  <TextField
-                    size="small"
-                    value={themeColor}
-                    onChange={(e) => onThemeChange(e.target.value)}
-                    placeholder="#8B1A1A"
-                    sx={{ ...inputSx, flex: 1 }}
-                  />
+                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1.5 }}>
+                  {THEME_COLORS.map((c) => {
+                    const active = themeColor === c.value;
+                    return (
+                      <Box
+                        key={c.value}
+                        onClick={() => onThemeChange(c.value)}
+                        sx={{
+                          borderRadius: 2.5,
+                          overflow: 'hidden',
+                          cursor: 'pointer',
+                          border: active ? '2px solid #FFD700' : '2px solid transparent',
+                          boxShadow: active ? `0 0 14px ${c.value}99` : 'none',
+                          transition: 'all 0.2s',
+                          '&:hover': { border: '2px solid rgba(255,215,0,0.5)', transform: 'translateY(-2px)' },
+                        }}
+                      >
+                        {/* Colour band */}
+                        <Box
+                          sx={{
+                            bgcolor: c.value,
+                            height: 48,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '1.4rem',
+                          }}
+                        >
+                          {active ? '✓' : c.emoji}
+                        </Box>
+                        {/* Label */}
+                        <Box
+                          sx={{
+                            bgcolor: 'rgba(255,255,255,0.05)',
+                            px: 1,
+                            py: 0.6,
+                            textAlign: 'center',
+                          }}
+                        >
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: active ? '#FFD700' : 'rgba(255,255,255,0.65)',
+                              fontWeight: active ? 700 : 400,
+                              fontSize: '0.7rem',
+                              lineHeight: 1.2,
+                              display: 'block',
+                            }}
+                          >
+                            {c.label}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    );
+                  })}
                 </Box>
               </Box>
             </CardContent>
