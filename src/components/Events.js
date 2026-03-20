@@ -3,7 +3,6 @@ import {
   Box,
   Container,
   Typography,
-  Grid,
   Card,
   CardContent,
   Divider,
@@ -139,27 +138,26 @@ export default function Events() {
             <Typography sx={{ color: 'rgba(255,255,255,0.5)' }}>{t('events.noEvents')}</Typography>
           </Box>
         ) : (
-          <Grid container spacing={3}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
             {filtered.map((event) => {
               const upcoming = isUpcoming(event.endDate || event.date);
               return (
-                <Grid item xs={12} md={6} key={event.id} sx={{ display: 'flex' }}>
-                  <Card
-                    sx={{
-                      bgcolor: 'rgba(255,255,255,0.04)',
-                      border: `1px solid ${upcoming ? 'rgba(255,215,0,0.25)' : 'rgba(255,255,255,0.08)'}`,
-                      borderRadius: 3,
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.3s',
-                      '&:hover': {
-                        border: `1px solid ${upcoming ? 'rgba(255,215,0,0.5)' : 'rgba(255,255,255,0.2)'}`,
-                        transform: 'translateY(-2px)',
-                      },
-                    }}
-                  >
-                    <CardContent sx={{ p: 3, flex: 1, display: 'flex', flexDirection: 'column', minHeight: 260 }}>
+                <Card
+                  key={event.id}
+                  sx={{
+                    bgcolor: 'rgba(255,255,255,0.04)',
+                    border: `1px solid ${upcoming ? 'rgba(255,215,0,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                    borderRadius: 3,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'all 0.3s',
+                    '&:hover': {
+                      border: `1px solid ${upcoming ? 'rgba(255,215,0,0.5)' : 'rgba(255,255,255,0.2)'}`,
+                      transform: 'translateY(-2px)',
+                    },
+                  }}
+                >
+                    <CardContent sx={{ p: 3, flex: 1, display: 'flex', flexDirection: 'column', minHeight: 280 }}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, alignItems: 'flex-start' }}>
                         <Chip
                           label={upcoming ? t('events.upcoming') : t('events.past')}
@@ -223,10 +221,9 @@ export default function Events() {
                       </Typography>
                     </CardContent>
                   </Card>
-                </Grid>
               );
             })}
-          </Grid>
+          </Box>
         )}
       </Container>
     </Box>

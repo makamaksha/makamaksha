@@ -145,38 +145,42 @@ export default function About() {
               </Typography>
               <Divider sx={{ width: 50, borderColor: '#FFD700', borderWidth: 2, mx: 'auto', mt: 1.5 }} />
             </Box>
-            <Grid container spacing={3}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(3, 1fr)' },
+                gap: 3,
+              }}
+            >
               {SIGNIFICANCE_ITEMS.map((item) => (
-                <Grid item xs={12} sm={4} md={4} key={item.key} sx={{ display: 'flex' }}>
-                  <Card
-                    sx={{
-                      bgcolor: 'rgba(139,26,26,0.12)',
-                      border: '1px solid rgba(255,215,0,0.2)',
-                      borderRadius: 3,
-                      width: '100%',
-                      textAlign: 'center',
-                      transition: 'all 0.3s',
-                      '&:hover': {
-                        border: '1px solid rgba(255,215,0,0.5)',
-                        bgcolor: 'rgba(139,26,26,0.25)',
-                        transform: 'translateY(-4px)',
-                        boxShadow: '0 8px 24px rgba(255,215,0,0.08)',
-                      },
-                    }}
-                  >
-                    <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
-                      <Typography sx={{ fontSize: '2.8rem', lineHeight: 1 }}>{item.icon}</Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, fontWeight: 500 }}
-                      >
-                        {t(item.key)}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
+                <Card
+                  key={item.key}
+                  sx={{
+                    bgcolor: 'rgba(139,26,26,0.12)',
+                    border: '1px solid rgba(255,215,0,0.2)',
+                    borderRadius: 3,
+                    textAlign: 'center',
+                    transition: 'all 0.3s',
+                    '&:hover': {
+                      border: '1px solid rgba(255,215,0,0.5)',
+                      bgcolor: 'rgba(139,26,26,0.25)',
+                      transform: 'translateY(-4px)',
+                      boxShadow: '0 8px 24px rgba(255,215,0,0.08)',
+                    },
+                  }}
+                >
+                  <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
+                    <Typography sx={{ fontSize: '2.8rem', lineHeight: 1 }}>{item.icon}</Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, fontWeight: 500 }}
+                    >
+                      {t(item.key)}
+                    </Typography>
+                  </CardContent>
+                </Card>
               ))}
-            </Grid>
+            </Box>
           </Grid>
         </Grid>
       </Container>
