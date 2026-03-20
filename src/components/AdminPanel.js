@@ -109,6 +109,21 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
     return url;
   };
 
+  const convertGoogleDriveUrl = (url) => {
+    const match = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+    if (match) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    const matchOpen = url.match(/drive\.google\.com\/open\?id=([^&]+)/);
+    if (matchOpen) return `https://drive.google.com/uc?export=view&id=${matchOpen[1]}`;
+    return url;
+  };
+
+  const handlePhotoUrlChange = (e) => {
+    const raw = e.target.value;
+    const converted = convertGoogleDriveUrl(raw);
+    setPhotoUrl(converted);
+    setPhotoPreview(converted);
+  };
+
   const handleAddVideo = () => {
     if (!videoUrl) return;
     const embedUrl = videoType === 'youtube' ? getYoutubeEmbedUrl(videoUrl) : videoUrl;
@@ -304,21 +319,26 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
                 <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.15)' }} />
               </Box>
 
-              <TextField
-                fullWidth
-                label="Image URL"
-                value={photoUrl}
-                onChange={(e) => { setPhotoUrl(e.target.value); setPhotoPreview(e.target.value); }}
-                placeholder="https://example.com/image.jpg"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LinkIcon sx={{ color: 'rgba(255,215,0,0.5)', fontSize: '1.1rem' }} />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={inputSx}
-              />
+              <Box>
+                <TextField
+                  fullWidth
+                  label="Image URL / Google Drive Link"
+                  value={photoUrl}
+                  onChange={handlePhotoUrlChange}
+                  placeholder="https://example.com/image.jpg  or  Google Drive share link"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LinkIcon sx={{ color: 'rgba(255,215,0,0.5)', fontSize: '1.1rem' }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={inputSx}
+                />
+                <Typography variant="caption" sx={{ color: 'rgba(255,220,100,0.55)', mt: 0.5, display: 'block', pl: 0.5 }}>
+                  💡 Paste a direct image URL, Google Photos link (<code style={{ fontSize: '0.75em' }}>lh3.googleusercontent.com/...</code>), or a Google Drive share link — it will be auto-converted.
+                </Typography>
+              </Box>
 
               <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
                 <TextField fullWidth label="Caption (English)" value={photoCaption} onChange={(e) => setPhotoCaption(e.target.value)} size="small" sx={inputSx} />

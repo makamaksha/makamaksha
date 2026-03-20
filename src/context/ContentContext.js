@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 
 const ContentContext = createContext();
 
-const CONTENT_VERSION = 'v4';
+const CONTENT_VERSION = 'v5';
 
 const defaultEvents = [
   {
@@ -64,60 +64,36 @@ const defaultEvents = [
 ];
 
 const defaultPhotos = [
-  {
-    id: 1,
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Kamakhya_Temple_6.jpg/1280px-Kamakhya_Temple_6.jpg',
-    caption: 'Kamakhya Temple Main Entrance',
-    captionHi: 'कामाख्या मंदिर मुख्य प्रवेश द्वार',
-  },
-  {
-    id: 2,
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Kamakhya_temple_guwahati.jpg/1280px-Kamakhya_temple_guwahati.jpg',
-    caption: 'Aerial View of Kamakhya Temple',
-    captionHi: 'कामाख्या मंदिर का हवाई दृश्य',
-  },
-  {
-    id: 3,
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Kamakhya_temple.jpg/1280px-Kamakhya_temple.jpg',
-    caption: 'The Sacred Nilachal Hill',
-    captionHi: 'पवित्र नीलाचल पर्वत',
-  },
-  {
-    id: 4,
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Kamakhya_Temple_Entrance.jpg/1280px-Kamakhya_Temple_Entrance.jpg',
-    caption: 'Temple Entrance Gate',
-    captionHi: 'मंदिर प्रवेश द्वार',
-  },
-  {
-    id: 5,
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Kamakhya_temple_during_Ambubachi_Mela.jpg/1280px-Kamakhya_temple_during_Ambubachi_Mela.jpg',
-    caption: 'Ambubachi Mela Celebrations',
-    captionHi: 'अम्बुबाची मेला उत्सव',
-  },
-  {
-    id: 6,
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Kamakhya_temple_interior.jpg/1280px-Kamakhya_temple_interior.jpg',
-    caption: 'Inside the Temple Complex',
-    captionHi: 'मंदिर परिसर के अंदर',
-  },
-  {
-    id: 7,
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Nilachal_Hill_Guwahati.jpg/1280px-Nilachal_Hill_Guwahati.jpg',
-    caption: 'Nilachal Hill — Guwahati',
-    captionHi: 'नीलाचल पहाड़ी — गुवाहाटी',
-  },
-  {
-    id: 8,
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Kamakhya_Devi.jpg/800px-Kamakhya_Devi.jpg',
-    caption: 'Maa Kamakhya Devi',
-    captionHi: 'माँ कामाख्या देवी',
-  },
-  {
-    id: 9,
-    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Brahmaputra_River_Guwahati.jpg/1280px-Brahmaputra_River_Guwahati.jpg',
-    caption: 'Brahmaputra River View from Nilachal',
-    captionHi: 'नीलाचल से ब्रह्मपुत्र नदी का दृश्य',
-  },
+  { id: 1, url: 'https://lh3.googleusercontent.com/pw/AP1GczNHu5R5LBruztBjBEeMBd19zzi8-myQZTyikjhBYFva-oVj564hNQkoOn2jKGbV08nouazdKEZMZV0rwAgVM9hx7OKjxeweTZPQIia3r3ItMUi1DzTc=w1200', caption: 'Maa Kamakhya Mandir — Vikaspuri Delhi', captionHi: 'माँ कामाख्या मंदिर — विकासपुरी दिल्ली' },
+  { id: 2, url: 'https://lh3.googleusercontent.com/pw/AP1GczOWCjrtf6IdAm0EPKq_LBc3hhBloHXbzEjOWkUDdMH1v2uP23p6Xa352ma95Z8sZVYfmusMnIrqVcqF7gXLxPcIIet6Uj5XUUz6u9Mjkq5IOAcU62Tl=w1200', caption: 'Divine Blessings of Maa Kamakhya', captionHi: 'माँ कामाख्या का दिव्य आशीर्वाद' },
+  { id: 3, url: 'https://lh3.googleusercontent.com/pw/AP1GczMx2gkHMVCSg4Ts9WBvzs-U8cA7xOvouZcFb52Un5TZwan7zECBdqunpq0j2aXwZjry5zMlB3aXjlfK_WV1UCtlAXjI1TsEllrsZNDvcIiIJQrVNtDq=w1200', caption: 'Temple Darshan', captionHi: 'मंदिर दर्शन' },
+  { id: 4, url: 'https://lh3.googleusercontent.com/pw/AP1GczMn2NT_HVZXeDU_-P5JKElULC-ETQnIAOWnWg8_m68cQk1T1qjFf883LKU32RGrrMwb-xEH0hke2QYfEj0nyUcxqg2dZDfuhzPQlr7631fPMeJQ7Pbs=w1200', caption: 'Puja Rituals at the Temple', captionHi: 'मंदिर में पूजा अनुष्ठान' },
+  { id: 5, url: 'https://lh3.googleusercontent.com/pw/AP1GczP_liZVI83a_5mAmFvuTumiRXEA6oI1v_MZ-EWCVsBI9E7EnwDuEhWqdjR_pVLDzp7n8ph8fb7hqgv4guhmpKflljTOKG4RY62fUij-ldPr_tAEUR4X=w1200', caption: 'Maa Kamakhya — Sacred Idol', captionHi: 'माँ कामाख्या — पवित्र मूर्ति' },
+  { id: 6, url: 'https://lh3.googleusercontent.com/pw/AP1GczPm7GzVidPXkNgP4t71CkIIPBDP8HCGBsr_Xw7nuJXeowlp-L-STm-8IIyYW521Qy6xOC0zreed0cfn2SxBpHfd5-PVMkwLMdujIzkh8JseDWwiddo0=w1200', caption: 'Devotees at the Temple', captionHi: 'मंदिर में भक्तजन' },
+  { id: 7, url: 'https://lh3.googleusercontent.com/pw/AP1GczOMyQNOmt7SN3b0M_w6hnIOSZ4vVyKGIYLC6-rlf6PquBCBybj66hkN686_7lcKhAgrB1UTpmEqzuD5wuwj14pxb8lYxZELDbz-mvDppOS3t9xl4zha=w1200', caption: 'Saturday Kirtan at Maa Kamakhya Mandir', captionHi: 'माँ कामाख्या मंदिर में शनिवार कीर्तन' },
+  { id: 8, url: 'https://lh3.googleusercontent.com/pw/AP1GczNst0ACGWwhhRobllVA0zWWcIyxrtZbx5yXFqvFoA7fc46Cr-NAxvDDBwBpDBSOjZc6_6-1FDmw8slr8sjW4x2cUyjAB8OKHv98KgamwJukEfL8Bj6Q=w1200', caption: 'Shri Gurudev Ji Maharaj', captionHi: 'श्री गुरुदेव जी महाराज' },
+  { id: 9, url: 'https://lh3.googleusercontent.com/pw/AP1GczPj4smLeM_AvMBR1U93nmNkw8TTHsA1qt7HgWaPhAc0X-pkLQN897yF3pOUZarwgxHhd8mouPSSrzgNwtBe04syjndwsgHIjNYVrL0B2z0PMIOOvGxu=w1200', caption: 'BrahmaRishi Shri Shyamanga Ji Maharaj', captionHi: 'ब्रह्मऋषि श्री श्यामाँगा जी महाराज' },
+  { id: 10, url: 'https://lh3.googleusercontent.com/pw/AP1GczMkro8Or1-Oswy0zpsE1oZxDhQ2gdQE0jCmXSMeGM7hw6eQwX4xi97zz-yVkjV9al5JZm0RY686fjMopym5BZworGQg9l2k2IBqOvkWndVXboQjDTb8=w1200', caption: 'Temple Satsang', captionHi: 'मंदिर सत्संग' },
+  { id: 11, url: 'https://lh3.googleusercontent.com/pw/AP1GczNHdfRkowPB5KZTsTDZm0CJKDJBzqO-2dud9To61uiuZBlAD1c94pNluvsQsCIBb-zQ92Br1aCT9F9qNuawpVgP8ZAPVjiD0_EvI4roSmSEi4EFJT1d=w1200', caption: 'Temple Prayer Gathering', captionHi: 'मंदिर प्रार्थना सभा' },
+  { id: 12, url: 'https://lh3.googleusercontent.com/pw/AP1GczPjOfa5n5T5U3ct_uOS4rUkwAm-aNDgqFcnkB8NVfEmmYtoPdebJJEa0PTZgE_sIFK6f5faNd1ZYcyAVQXQO_0kuAsosyldEDSoU0tLu0A1mFcoLCMd=w1200', caption: 'Divine Prashad Distribution', captionHi: 'दिव्य प्रसाद वितरण' },
+  { id: 13, url: 'https://lh3.googleusercontent.com/pw/AP1GczNgGocKrGHzGnjcSfU_PEqHrAuKHKV4Gxot1ZfAnyxMngtM_2wdtxPLovmdYRnJ_rIvxeBQy3cY1W-Yjc2Jdwr72RiapPD8fBcJp0gO01KF--Kef6jo=w1200', caption: 'Bhajan & Kirtan Session', captionHi: 'भजन और कीर्तन सत्र' },
+  { id: 14, url: 'https://lh3.googleusercontent.com/pw/AP1GczNNtUKA9LsxBIlxT8reZ1gN06vz1iVCoG4L-83VxINm_7L34qxzizUzL5_agjSxWIsvczG6UZ40cDQbjSVEKAaWrJABqs3ZfYVDjJka9uHJdnAhmR_z=w1200', caption: 'Spiritual Discourse', captionHi: 'आध्यात्मिक प्रवचन' },
+  { id: 15, url: 'https://lh3.googleusercontent.com/pw/AP1GczN0VDhykB5wnOQaSjdYmIQ4J7Qqs02HBxsVxMwJjf9wZPiAeoWbtrweQ1o8Gz5Ke1pQsF74sh7sVTOAcL9TahVb1tNUL0adXKsEDisa_R2s5_6VRm_X=w1200', caption: 'Maa Kamakhya Aarti', captionHi: 'माँ कामाख्या आरती' },
+  { id: 16, url: 'https://lh3.googleusercontent.com/pw/AP1GczMXKvGI5GNN0hte9GS931PIE7_k1jYwkiepDVDBGiZ-BMTurnoMK0_gVo9Ej9t7Z3-UhQ5A3QmHK8b3VzJscKgqgceO4GR6T2ca43VKli0PYKo5H0Ed=w1200', caption: 'Sacred Temple Premises', captionHi: 'पवित्र मंदिर परिसर' },
+  { id: 17, url: 'https://lh3.googleusercontent.com/pw/AP1GczMIVRlCLP14WW3BlLu1ABM1l_g4EGn-fROJlzGjVbc5jXj8urA5t7MbcRcsOMGD7Pd8csIX97XXN53dH2Mt-hyuogADBswVNIFqCZd1Zleimy29UAW5=w1200', caption: 'Temple Interior', captionHi: 'मंदिर का अंदरूनी भाग' },
+  { id: 18, url: 'https://lh3.googleusercontent.com/pw/AP1GczMLvHRIYWs9XanL0fffwaYqA_rxt4ybVHjA7hdtzml_7jUskxyygr4-Vw0PNF-C1EskeWEWkdexCFJm7MDev31zdaSNJ_RU36p6Q4G-ZgyTyzKE7-XO=w1200', caption: 'Weekly Kirtan Program', captionHi: 'साप्ताहिक कीर्तन कार्यक्रम' },
+  { id: 19, url: 'https://lh3.googleusercontent.com/pw/AP1GczNJreXd9rkjjUh8gEwfccSK7A3oGKSc9SIdDNQj4quWmLiEJhUhbgKOlGeyqcpt2vxLAKX5HmyrTAkfqbcCAoPQtWIMVrX239d0k8B-2WRum9v1qNOf=w1200', caption: 'Maa Kamakhya Seva', captionHi: 'माँ कामाख्या सेवा' },
+  { id: 20, url: 'https://lh3.googleusercontent.com/pw/AP1GczMIoRx_7eY8EwvoQHON6tFeJub4v2xmo4eXUttOjGUIDf9u_ocHabuU-zTSoT0ZLyflpsUMcENonZ85Aovv3baQTJzpTMqWbDmrVD2TSC6gkobs4bUC=w1200', caption: 'Festival Celebrations', captionHi: 'त्योहार समारोह' },
+  { id: 21, url: 'https://lh3.googleusercontent.com/pw/AP1GczN50Aqdhri_i-0UF5I_rGMccNogAP7RcMICNmfOEtS05kgFi9kRf_PQVATC81A1z6YCecUWxpLK1rMmPblbXOiWiWiF85SA4G_Ea2GsLW6_t1jt9MfD=w1200', caption: 'Devotees in Prayer', captionHi: 'प्रार्थना में भक्तजन' },
+  { id: 22, url: 'https://lh3.googleusercontent.com/pw/AP1GczNw8nSsLw9UvbasUqtkur0NRnSeRYU44F8I2VxChdtl9yZpqCyma9zxbYyOHHWuPy0ZY_HeJukB8izj-dRuRgIJ7oPt9MO9KVqGTDXv4eEAtuCAFPM8=w1200', caption: 'Temple Grounds', captionHi: 'मंदिर का प्रांगण' },
+  { id: 23, url: 'https://lh3.googleusercontent.com/pw/AP1GczOW3wbJcFhSn-XCCGjfjXodDkOHZ53INIMrDHJaMzSc2zTMlG307-2xZ2GPyTZmqruY5XLeE1ca0EWp_WglEGsMBddFUQGbGbvg6ngG_OrgJiF7nmhg=w1200', caption: 'Mantra Chanting', captionHi: 'मंत्र जाप' },
+  { id: 24, url: 'https://lh3.googleusercontent.com/pw/AP1GczP4HuujC132i9YkHO93bdur_9sdat2h31baXptJVrLSjNR-NHFj81s4vka4gvTi629oU5moV-fH5YgLlekNw2UefD6VDd29voFo2jiL_JZde9Gg3QCj=w1200', caption: 'Havan (Sacred Fire Ritual)', captionHi: 'हवन (पवित्र अग्नि अनुष्ठान)' },
+  { id: 25, url: 'https://lh3.googleusercontent.com/pw/AP1GczPwNITflBrxL5ARF3yTaUJADCu8e8_wOC8zLsQtsB-1ihFTHVNvHu_PuQCEedbycFvnUiWgNRkR4L66IPZl_J2ZNJRJBx8gBghD_Zok3iMWgRiBDJau=w1200', caption: 'Community Gathering', captionHi: 'सामुदायिक सभा' },
+  { id: 26, url: 'https://lh3.googleusercontent.com/pw/AP1GczM9BGt7yyKMwnL4AcLmeBZyz2zXBCM0Cl8DBiB9k-7Sn0pRnhnAM24xQSOjDSie_hxFKdEpsUJ6Ptv6p4nMaRUS7-zbrdLxvHZXnj2CgGWxlzxcYfbk=w1200', caption: 'JG-1 62B Vikaspuri — Temple View', captionHi: 'जेजी-1 62बी विकासपुरी — मंदिर दृश्य' },
+  { id: 27, url: 'https://lh3.googleusercontent.com/pw/AP1GczOOB-a_gGpbS4SuxBfBN647N19Ik0187W-LEcmPWMngxE0zDMyVJkPaLNay7aqHwpQTgVwJ-Pn9vMnkNeUdkSuKGARdYVt6vl7E1kzDSSikfxmS7KNO=w1200', caption: 'Moksha Dham — Sacred Space', captionHi: 'मोक्ष धाम — पवित्र स्थान' },
+  { id: 28, url: 'https://lh3.googleusercontent.com/pw/AP1GczNuP6dBe9JiOtZiXz8vL_RMjKRspHOqYKiM9jzoAcFsOlEIDBckuoTXdr9nqwClq1Q12RzbprMczYLqeBxJUOspEYTg45ymIV_mDDK4zxhQDUFSxE-2=w1200', caption: 'Spiritual Initiation Ceremony', captionHi: 'दीक्षा समारोह' },
+  { id: 29, url: 'https://lh3.googleusercontent.com/pw/AP1GczP8Y7U7KaK9QcNF5j6tMBAoxbJMdvdu2OMmO234oyeZ4Yd83S-R6Pjqs48LYM0WlnASRHlaX6qhVJauLHhos6dcA2EF3JHsxadHZvD7b8BX7SlHfm8F=w1200', caption: 'Blessed Gathering at Mandir', captionHi: 'मंदिर में आशीर्वाद सभा' },
+  { id: 30, url: 'https://lh3.googleusercontent.com/pw/AP1GczOIR1dhKceniLvbeNToV6S6sYqrQJy7yL3Evn9CThVmXOEYwDudEnZyZLEnAYkrTeKVC56GhUSKSPPvbQVp_3N-CbhGjwhrWOzjFvGJQR7Tys2MKwXU=w1200', caption: 'Maa Kamakhya Devi — New Delhi', captionHi: 'माँ कामाख्या देवी — नई दिल्ली' },
 ];
 
 const defaultVideos = [
