@@ -18,8 +18,8 @@ import { useTranslation } from 'react-i18next';
 const HIGHLIGHTS = [
   { iconKey: '🪔', titleKey: 'home.h1Title', descKey: 'home.h1Desc' },
   { iconKey: '🕉️', titleKey: 'home.h2Title', descKey: 'home.h2Desc' },
-  { iconKey: '🔱', titleKey: 'home.h3Title', descKey: 'home.h3Desc' },
   { iconKey: '⏰', titleKey: 'home.h4Title', descKey: 'home.h4Desc' },
+  { iconKey: '🌸', titleKey: 'home.h5Title', descKey: 'home.h5Desc' },
 ];
 
 const STATS = [

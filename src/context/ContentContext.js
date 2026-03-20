@@ -12,9 +12,9 @@ const defaultEvents = [
     location: 'Kamakhya Temple, Guwahati',
     locationHi: 'कामाख्या मंदिर, गुवाहाटी',
     description:
-      'The most important annual festival of Kamakhya Temple. The temple remains closed for 3 days during which Goddess Kamakhya is believed to be in menstruation (Ambubachi). Thousands of tantric saints and devotees gather from across India.',
+      'The most important annual festival of Kamakhya Temple. The temple remains closed for 3 days during which Goddess Kamakhya is believed to be in menstruation (Ambubachi). Thousands of saints and devotees gather from across India.',
     descriptionHi:
-      'कामाख्या मंदिर का सबसे महत्वपूर्ण वार्षिक उत्सव। मंदिर 3 दिनों के लिए बंद रहता है, जिस दौरान देवी कामाख्या को रजस्वला माना जाता है। देश भर से हजारों तांत्रिक संत और भक्त एकत्रित होते हैं।',
+      'कामाख्या मंदिर का सबसे महत्वपूर्ण वार्षिक उत्सव। मंदिर 3 दिनों के लिए बंद रहता है, जिस दौरान देवी कामाख्या को रजस्वला माना जाता है। देश भर से हजारों संत और भक्त एकत्रित होते हैं।',
     type: 'upcoming',
   },
   {
@@ -86,6 +86,36 @@ const defaultPhotos = [
     caption: 'Temple Entrance Gate',
     captionHi: 'मंदिर प्रवेश द्वार',
   },
+  {
+    id: 5,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Kamakhya_temple_during_Ambubachi_Mela.jpg/1280px-Kamakhya_temple_during_Ambubachi_Mela.jpg',
+    caption: 'Ambubachi Mela Celebrations',
+    captionHi: 'अम्बुबाची मेला उत्सव',
+  },
+  {
+    id: 6,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Kamakhya_temple_interior.jpg/1280px-Kamakhya_temple_interior.jpg',
+    caption: 'Inside the Temple Complex',
+    captionHi: 'मंदिर परिसर के अंदर',
+  },
+  {
+    id: 7,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Nilachal_Hill_Guwahati.jpg/1280px-Nilachal_Hill_Guwahati.jpg',
+    caption: 'Nilachal Hill — Guwahati',
+    captionHi: 'नीलाचल पहाड़ी — गुवाहाटी',
+  },
+  {
+    id: 8,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Kamakhya_Devi.jpg/800px-Kamakhya_Devi.jpg',
+    caption: 'Maa Kamakhya Devi',
+    captionHi: 'माँ कामाख्या देवी',
+  },
+  {
+    id: 9,
+    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Brahmaputra_River_Guwahati.jpg/1280px-Brahmaputra_River_Guwahati.jpg',
+    caption: 'Brahmaputra River View from Nilachal',
+    captionHi: 'नीलाचल से ब्रह्मपुत्र नदी का दृश्य',
+  },
 ];
 
 const defaultVideos = [
@@ -101,6 +131,27 @@ const defaultVideos = [
     url: 'https://www.youtube.com/embed/Hy9tHBB_EPs',
     caption: 'Ambubachi Mela at Kamakhya',
     captionHi: 'कामाख्या में अम्बुबाची मेला',
+    type: 'youtube',
+  },
+  {
+    id: 3,
+    url: 'https://www.youtube.com/embed/4H0oZ0UVBKE',
+    caption: 'Kamakhya Temple Aarti',
+    captionHi: 'कामाख्या मंदिर आरती',
+    type: 'youtube',
+  },
+  {
+    id: 4,
+    url: 'https://www.youtube.com/embed/kx8nqsWmvXw',
+    caption: 'History of Kamakhya Mandir',
+    captionHi: 'कामाख्या मंदिर का इतिहास',
+    type: 'youtube',
+  },
+  {
+    id: 5,
+    url: 'https://www.youtube.com/embed/WGh4PUKcY0U',
+    caption: 'Navaratri Celebrations at Kamakhya',
+    captionHi: 'कामाख्या में नवरात्रि उत्सव',
     type: 'youtube',
   },
 ];
