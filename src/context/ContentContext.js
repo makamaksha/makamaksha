@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 
 const ContentContext = createContext();
 
-const CONTENT_VERSION = 'v3';
+const CONTENT_VERSION = 'v4';
 
 const defaultEvents = [
   {
@@ -123,44 +123,51 @@ const defaultPhotos = [
 const defaultVideos = [
   {
     id: 1,
-    url: 'https://www.youtube.com/embed/94KNE3GapD4',
-    caption: 'Kamakhya Temple Tour — Shakti Peetha',
-    captionHi: 'कामाख्या मंदिर यात्रा — शक्तिपीठ',
+    url: 'https://www.youtube.com/embed/3ntAoYmPqpg',
+    caption: 'Maa Kamakhya Mandir — Darshan',
+    captionHi: 'माँ कामाख्या मंदिर — दर्शन',
     type: 'youtube',
   },
   {
     id: 2,
-    url: 'https://www.youtube.com/embed/KXD2ReVbvHY',
-    caption: 'Maa Kamakhya Darshan 2024',
-    captionHi: 'माँ कामाख्या दर्शन 2024',
+    url: 'https://www.youtube.com/embed/FcCsCk3M1pE',
+    caption: 'Maa Kamakhya — Divine Blessings',
+    captionHi: 'माँ कामाख्या — दिव्य आशीर्वाद',
     type: 'youtube',
   },
   {
     id: 3,
-    url: 'https://www.youtube.com/embed/VDhPXdkP6Js',
-    caption: 'Kamakhya Temple — Guwahati, Assam',
-    captionHi: 'कामाख्या मंदिर — गुवाहाटी, असम',
+    url: 'https://www.youtube.com/embed/Eng4VuWfZG0',
+    caption: 'Maa Kamakhya Mandir — Vikaspuri Delhi',
+    captionHi: 'माँ कामाख्या मंदिर — विकासपुरी दिल्ली',
     type: 'youtube',
   },
   {
     id: 4,
-    url: 'https://www.youtube.com/embed/Ugw4qaLz_nA',
-    caption: 'Kamakhya Devi Mandir Tour Guide',
-    captionHi: 'कामाख्या देवी मंदिर यात्रा गाइड',
+    url: 'https://www.youtube.com/embed/V90ZXIKNIms',
+    caption: 'Kirtan at Maa Kamakhya Mandir',
+    captionHi: 'माँ कामाख्या मंदिर में कीर्तन',
     type: 'youtube',
   },
   {
     id: 5,
-    url: 'https://www.youtube.com/embed/OjjxJcAVNfE',
-    caption: 'Kamakhya Mandir Full Tour Guide',
-    captionHi: 'कामाख्या मंदिर सम्पूर्ण यात्रा',
+    url: 'https://www.youtube.com/embed/YXpUQIDZeUM',
+    caption: 'Maa Kamakhya — Moksha Sandesh',
+    captionHi: 'माँ कामाख्या — मोक्ष संदेश',
     type: 'youtube',
   },
   {
     id: 6,
-    url: 'https://www.youtube.com/embed/Ugw4qaLz_nA',
-    caption: 'Kamakhya Mata — Divine Blessings',
-    captionHi: 'कामाख्या माता — दिव्य आशीर्वाद',
+    url: 'https://www.youtube.com/embed/-jpfm8HSgfA',
+    caption: 'Gurudev Ji Maharaj — Pravachan',
+    captionHi: 'गुरुदेव जी महाराज — प्रवचन',
+    type: 'youtube',
+  },
+  {
+    id: 7,
+    url: 'https://www.youtube.com/embed/dN1Pb_S3wjo',
+    caption: 'Shri Shyamanga Ji Maharaj — Satsang',
+    captionHi: 'श्री श्यामाँगा जी महाराज — सत्संग',
     type: 'youtube',
   },
 ];
