@@ -7,20 +7,15 @@ import {
   Card,
   CardContent,
   Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
 } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useTranslation } from 'react-i18next';
 
-const SIGNIFICANCE = [
-  'about.significance1',
-  'about.significance2',
-  'about.significance3',
-  'about.significance4',
-  'about.significance5',
+const SIGNIFICANCE_ITEMS = [
+  { icon: '🛕', key: 'about.significance1' },
+  { icon: '🙏', key: 'about.significance2' },
+  { icon: '🪔', key: 'about.significance3' },
+  { icon: '❤️', key: 'about.significance4' },
+  { icon: '🔱', key: 'about.significance5' },
 ];
 
 export default function About() {
@@ -142,41 +137,45 @@ export default function About() {
           </Grid>
 
           {/* Significance */}
-          <Grid item xs={12} sx={{ display: 'flex' }}>
-            <Card
-              sx={{
-                bgcolor: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,215,0,0.15)',
-                borderRadius: 3,
-                width: '100%',
-              }}
-            >
-              <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
-                  <Typography sx={{ fontSize: '2rem' }}>🔱</Typography>
-                  <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700 }}>
-                    {t('about.significanceTitle')}
-                  </Typography>
-                </Box>
-                <List dense disablePadding>
-                  {SIGNIFICANCE.map((key) => (
-                    <ListItem key={key} disableGutters sx={{ py: 0.5 }}>
-                      <ListItemIcon sx={{ minWidth: 36 }}>
-                        <CheckCircleIcon sx={{ color: '#FFD700', fontSize: '1.1rem' }} />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={t(key)}
-                        primaryTypographyProps={{
-                          color: 'rgba(255,255,255,0.8)',
-                          fontSize: '0.95rem',
-                          lineHeight: 1.6,
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </CardContent>
-            </Card>
+          <Grid item xs={12}>
+            <Box sx={{ textAlign: 'center', mb: 3 }}>
+              <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 700 }}>
+                🔱 {t('about.significanceTitle')}
+              </Typography>
+              <Divider sx={{ width: 50, borderColor: '#FFD700', borderWidth: 2, mx: 'auto', mt: 1.5 }} />
+            </Box>
+            <Grid container spacing={3}>
+              {SIGNIFICANCE_ITEMS.map((item) => (
+                <Grid item xs={12} sm={6} md={4} key={item.key} sx={{ display: 'flex' }}>
+                  <Card
+                    sx={{
+                      bgcolor: 'rgba(139,26,26,0.12)',
+                      border: '1px solid rgba(255,215,0,0.2)',
+                      borderRadius: 3,
+                      width: '100%',
+                      textAlign: 'center',
+                      transition: 'all 0.3s',
+                      '&:hover': {
+                        border: '1px solid rgba(255,215,0,0.5)',
+                        bgcolor: 'rgba(139,26,26,0.25)',
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 8px 24px rgba(255,215,0,0.08)',
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
+                      <Typography sx={{ fontSize: '2.8rem', lineHeight: 1 }}>{item.icon}</Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, fontWeight: 500 }}
+                      >
+                        {t(item.key)}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
         </Grid>
       </Container>

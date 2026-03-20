@@ -143,12 +143,15 @@ export default function Events() {
             {filtered.map((event) => {
               const upcoming = isUpcoming(event.endDate || event.date);
               return (
-                <Grid item xs={12} key={event.id}>
+                <Grid item xs={12} md={6} key={event.id} sx={{ display: 'flex' }}>
                   <Card
                     sx={{
                       bgcolor: 'rgba(255,255,255,0.04)',
                       border: `1px solid ${upcoming ? 'rgba(255,215,0,0.25)' : 'rgba(255,255,255,0.08)'}`,
                       borderRadius: 3,
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
                       transition: 'all 0.3s',
                       '&:hover': {
                         border: `1px solid ${upcoming ? 'rgba(255,215,0,0.5)' : 'rgba(255,255,255,0.2)'}`,
@@ -156,7 +159,7 @@ export default function Events() {
                       },
                     }}
                   >
-                    <CardContent sx={{ p: 3, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <CardContent sx={{ p: 3, flex: 1, display: 'flex', flexDirection: 'column', minHeight: 260 }}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, alignItems: 'flex-start' }}>
                         <Chip
                           label={upcoming ? t('events.upcoming') : t('events.past')}
@@ -206,7 +209,15 @@ export default function Events() {
 
                       <Typography
                         variant="body2"
-                        sx={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, flex: 1 }}
+                        sx={{
+                          color: 'rgba(255,255,255,0.7)',
+                          lineHeight: 1.7,
+                          flex: 1,
+                          display: '-webkit-box',
+                          WebkitLineClamp: 4,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}
                       >
                         {isHindi && event.descriptionHi ? event.descriptionHi : event.description}
                       </Typography>

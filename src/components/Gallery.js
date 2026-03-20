@@ -116,7 +116,7 @@ export default function Gallery() {
             ) : (
               <Grid container spacing={2}>
                 {photos.map((photo) => (
-                  <Grid item xs={12} sm={6} md={4} key={photo.id}>
+                  <Grid item xs={12} sm={4} key={photo.id}>
                     <Card
                       sx={{
                         bgcolor: 'rgba(255,255,255,0.04)',
@@ -185,7 +185,7 @@ export default function Gallery() {
             ) : (
               <Grid container spacing={3}>
                 {videos.map((video) => (
-                  <Grid item xs={12} sm={6} key={video.id}>
+                  <Grid item xs={12} sm={4} key={video.id}>
                     <Card
                       sx={{
                         bgcolor: 'rgba(255,255,255,0.04)',
@@ -198,15 +198,16 @@ export default function Gallery() {
                         {video.type === 'youtube' ? (
                           <iframe
                             title={isHindi ? video.captionHi : video.caption}
-                            src={video.url}
+                            src={`${video.url}?rel=0&modestbranding=1`}
                             style={{
                               position: 'absolute',
                               top: 0, left: 0,
                               width: '100%', height: '100%',
                               border: 'none',
                             }}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowFullScreen
+                            referrerPolicy="no-referrer-when-downgrade"
                           />
                         ) : (
                           <video
