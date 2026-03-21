@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -124,6 +124,92 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
     setPhotoPreview(converted);
   };
 
+  // ── Google Drive Picker ──────────────────────────────────────────────────
+  const [drivePickerReady, setDrivePickerReady] = useState(false);
+  const driveTokenRef = useRef(null);
+
+  const GAPI_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+  const GCLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const isGoogleConfigured =
+    GAPI_KEY && GAPI_KEY !== 'YOUR_API_KEY_HERE' &&
+    GCLIENT_ID && GCLIENT_ID !== 'YOUR_CLIENT_ID_HERE.apps.googleusercontent.com';
+
+  useEffect(() => {
+    if (!isGoogleConfigured) return;
+
+    let gapiOk = false;
+    let gisOk = false;
+    const checkReady = () => { if (gapiOk && gisOk) setDrivePickerReady(true); };
+
+    const loadScript = (src, cb) => {
+      if (document.querySelector(`script[src="${src}"]`)) { cb(); return; }
+      const s = document.createElement('script');
+      s.src = src; s.async = true; s.onload = cb;
+      document.head.appendChild(s);
+    };
+
+    loadScript('https://apis.google.com/js/api.js', () => {
+      window.gapi.load('picker', () => { gapiOk = true; checkReady(); });
+    });
+    loadScript('https://accounts.google.com/gsi/client', () => {
+      gisOk = true; checkReady();
+    });
+  }, [isGoogleConfigured]);
+
+  const showDrivePicker = (token, target) => {
+    const viewId =
+      target === 'video'
+        ? window.google.picker.ViewId.DOCS_VIDEOS
+        : window.google.picker.ViewId.DOCS_IMAGES;
+
+    const view = new window.google.picker.DocsView(viewId).setIncludeFolders(false);
+
+    new window.google.picker.PickerBuilder()
+      .addView(view)
+      .setOAuthToken(token)
+      .setDeveloperKey(GAPI_KEY)
+      .setCallback((data) => {
+        if (data.action === window.google.picker.Action.PICKED) {
+          const file = data.docs[0];
+          if (target === 'video') {
+            setVideoUrl(`https://drive.google.com/file/d/${file.id}/preview`);
+            setVideoType('gdrive');
+            setVideoCaption(file.name || 'Temple Video');
+          } else {
+            const url = `https://drive.google.com/uc?export=view&id=${file.id}`;
+            setPhotoUrl(url);
+            setPhotoPreview(url);
+            setPhotoCaption(file.name ? file.name.replace(/\.[^/.]+$/, '') : 'Temple Photo');
+          }
+        }
+      })
+      .build()
+      .setVisible(true);
+  };
+
+  const handleDrivePick = (target) => {
+    if (!drivePickerReady) {
+      setSnack('Google Drive picker is not ready yet, please wait a moment...');
+      return;
+    }
+    if (driveTokenRef.current) {
+      showDrivePicker(driveTokenRef.current, target);
+      return;
+    }
+    const tokenClient = window.google.accounts.oauth2.initTokenClient({
+      client_id: GCLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/drive.readonly',
+      callback: (response) => {
+        if (response.access_token) {
+          driveTokenRef.current = response.access_token;
+          showDrivePicker(response.access_token, target);
+        }
+      },
+    });
+    tokenClient.requestAccessToken();
+  };
+  // ────────────────────────────────────────────────────────────────────────
+
   const handleAddVideo = () => {
     if (!videoUrl) return;
     const embedUrl = videoType === 'youtube' ? getYoutubeEmbedUrl(videoUrl) : videoUrl;
@@ -131,7 +217,7 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
       url: embedUrl,
       caption: videoCaption || 'Temple Video',
       captionHi: videoCaptionHi || videoCaption || 'मंदिर वीडियो',
-      type: videoType,
+      type: videoType === 'gdrive' ? 'gdrive' : videoType,
     });
     setVideoCaption('');
     setVideoCaptionHi('');
@@ -315,6 +401,57 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
               {/* OR divider */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.15)' }} />
+                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.5)', fontWeight: 600 }}>OR</Typography>
+                <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.15)' }} />
+              </Box>
+
+              {/* Google Drive picker button */}
+              {isGoogleConfigured ? (
+                <Box>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={() => handleDrivePick('photo')}
+                    disabled={!drivePickerReady}
+                    sx={{
+                      borderColor: 'rgba(66,133,244,0.5)',
+                      color: '#4285F4',
+                      fontWeight: 700,
+                      py: 1.4,
+                      fontSize: '0.95rem',
+                      borderRadius: 2,
+                      gap: 1.2,
+                      '&:hover': { borderColor: '#4285F4', bgcolor: 'rgba(66,133,244,0.08)' },
+                      '&.Mui-disabled': { borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.25)' },
+                    }}
+                  >
+                    <Box component="span" sx={{ fontSize: '1.2rem' }}>
+                      <svg width="18" height="18" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg" style={{ verticalAlign: 'middle', marginRight: 6 }}>
+                        <path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/>
+                        <path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#00ac47"/>
+                        <path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/>
+                        <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
+                        <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
+                        <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 27h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+                      </svg>
+                    </Box>
+                    {drivePickerReady ? 'Pick Photo from Google Drive' : 'Loading Google Drive…'}
+                  </Button>
+                  <Typography variant="caption" sx={{ color: 'rgba(255,180,80,0.6)', mt: 0.6, display: 'block', pl: 0.5 }}>
+                    ⚠️ The selected file must be shared publicly ("Anyone with the link") to appear on the website.
+                  </Typography>
+                </Box>
+              ) : (
+                <Box sx={{ bgcolor: 'rgba(255,255,255,0.04)', borderRadius: 2, p: 2, border: '1px dashed rgba(255,215,0,0.15)' }}>
+                  <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.45)', display: 'block', textAlign: 'center' }}>
+                    🔑 Google Drive picker requires API keys in <code>.env.local</code>.<br />
+                    See setup guide in project root.
+                  </Typography>
+                </Box>
+              )}
+
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.15)' }} />
                 <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.5)', fontWeight: 600 }}>OR PASTE URL</Typography>
                 <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.15)' }} />
               </Box>
@@ -396,7 +533,7 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
             <CardContent sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 3 }}>
               {/* Type selector */}
               <Box sx={{ display: 'flex', gap: 1.5 }}>
-                {[{ type: 'youtube', label: '▶ YouTube', desc: 'youtu.be link' }, { type: 'file', label: '📁 Direct URL', desc: 'mp4 / web link' }].map((opt) => (
+                {[{ type: 'youtube', label: '▶ YouTube', desc: 'youtu.be link' }, { type: 'file', label: '📁 Direct URL', desc: 'mp4 / web link' }, { type: 'gdrive', label: '🟢 Google Drive', desc: 'Drive video' }].map((opt) => (
                   <Box
                     key={opt.type}
                     onClick={() => setVideoType(opt.type)}
@@ -420,9 +557,55 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
                 ))}
               </Box>
 
+              {/* Google Drive video picker */}
+              {videoType === 'gdrive' && (
+                <Box>
+                  {isGoogleConfigured ? (
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      onClick={() => handleDrivePick('video')}
+                      disabled={!drivePickerReady}
+                      sx={{
+                        borderColor: 'rgba(66,133,244,0.5)',
+                        color: '#4285F4',
+                        fontWeight: 700,
+                        py: 1.4,
+                        borderRadius: 2,
+                        '&:hover': { borderColor: '#4285F4', bgcolor: 'rgba(66,133,244,0.08)' },
+                        '&.Mui-disabled': { borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.25)' },
+                      }}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg" style={{ verticalAlign: 'middle', marginRight: 8 }}>
+                        <path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/>
+                        <path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#00ac47"/>
+                        <path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/>
+                        <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
+                        <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
+                        <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 27h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+                      </svg>
+                      {drivePickerReady ? 'Pick Video from Google Drive' : 'Loading Google Drive…'}
+                    </Button>
+                  ) : (
+                    <Box sx={{ bgcolor: 'rgba(255,255,255,0.04)', borderRadius: 2, p: 2, border: '1px dashed rgba(255,215,0,0.15)' }}>
+                      <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.45)', display: 'block', textAlign: 'center' }}>
+                        🔑 Google Drive picker requires API keys in <code>.env.local</code>.
+                      </Typography>
+                    </Box>
+                  )}
+                  <Typography variant="caption" sx={{ color: 'rgba(255,180,80,0.6)', mt: 0.6, display: 'block', pl: 0.5 }}>
+                    ⚠️ Video must be shared publicly ("Anyone with the link") in Google Drive.
+                  </Typography>
+                </Box>
+              )}
+
               <TextField
                 fullWidth
-                label={videoType === 'youtube' ? 'YouTube URL (youtu.be/... or youtube.com/watch?v=...)' : 'Video File URL'}
+                label={
+                  videoType === 'youtube' ? 'YouTube URL (youtu.be/... or youtube.com/watch?v=...)'
+                  : videoType === 'gdrive' ? 'Google Drive video URL (auto-filled after picking)'
+                  : 'Video File URL'
+                }
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
                 InputProps={{
