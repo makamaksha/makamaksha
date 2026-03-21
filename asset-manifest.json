@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/makamaksha/static/css/main.2b1506e5.css",
-    "main.js": "/makamaksha/static/js/main.31d8b310.js",
+    "main.js": "/makamaksha/static/js/main.f7468cc4.js",
     "index.html": "/makamaksha/index.html",
     "main.2b1506e5.css.map": "/makamaksha/static/css/main.2b1506e5.css.map",
-    "main.31d8b310.js.map": "/makamaksha/static/js/main.31d8b310.js.map"
+    "main.f7468cc4.js.map": "/makamaksha/static/js/main.f7468cc4.js.map"
   },
   "entrypoints": [
     "static/css/main.2b1506e5.css",
-    "static/js/main.31d8b310.js"
+    "static/js/main.f7468cc4.js"
   ]
 }
