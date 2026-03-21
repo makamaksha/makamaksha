@@ -176,12 +176,24 @@ export function ContentProvider({ children }) {
 
   const savePhotos = (newPhotos) => {
     setPhotos(newPhotos);
-    localStorage.setItem('kamakhya_photos', JSON.stringify(newPhotos));
+    try {
+      localStorage.setItem('kamakhya_photos', JSON.stringify(newPhotos));
+    } catch (e) {
+      console.warn('Could not save photos to localStorage:', e);
+    }
   };
 
   const saveVideos = (newVideos) => {
     setVideos(newVideos);
-    localStorage.setItem('kamakhya_videos', JSON.stringify(newVideos));
+    // Skip data: and blob: URLs — they are too large for localStorage
+    const persistable = newVideos.filter(
+      (v) => !v.url.startsWith('data:') && !v.url.startsWith('blob:')
+    );
+    try {
+      localStorage.setItem('kamakhya_videos', JSON.stringify(persistable));
+    } catch (e) {
+      console.warn('Could not save videos to localStorage:', e);
+    }
   };
 
   const saveEvents = (newEvents) => {

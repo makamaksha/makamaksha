@@ -616,6 +616,16 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
                   ⚠️ Video is larger than 50 MB. Please use YouTube or Google Drive for large videos.
                 </Typography>
               )}
+              {videoPreview && !videoSizeWarn && (
+                <Box sx={{ bgcolor: 'rgba(255,165,0,0.1)', border: '1px solid rgba(255,165,0,0.3)', borderRadius: 2, p: 2 }}>
+                  <Typography variant="caption" sx={{ color: 'rgba(255,180,60,0.9)', display: 'block', fontWeight: 600 }}>
+                    📱 Device videos play in this session only
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'rgba(255,180,60,0.6)', display: 'block', mt: 0.4 }}>
+                    Browsers can't store large video files permanently. For videos that stay after refresh, upload to <strong>YouTube</strong> or <strong>Google Drive</strong> and add the link below instead.
+                  </Typography>
+                </Box>
+              )}
 
               {/* OR divider */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
