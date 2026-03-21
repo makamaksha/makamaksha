@@ -199,40 +199,6 @@ export default function Home({ themeColor }) {
         </Container>
       </Box>
 
-      {/* Welcome Section */}
-      <Box sx={{ bgcolor: '#0d0000', py: { xs: 6, md: 10 } }}>
-        <Container maxWidth="md" sx={{ textAlign: 'center' }}>
-          <Typography
-            variant="overline"
-            sx={{ color: '#FFD700', letterSpacing: 4, mb: 1, display: 'block' }}
-          >
-            ॥ जय माँ कामाख्या ॥
-          </Typography>
-          <Typography
-            variant="h3"
-            sx={{
-              color: '#fff',
-              fontWeight: 700,
-              mb: 3,
-              fontSize: { xs: '1.8rem', md: '2.5rem' },
-            }}
-          >
-            {t('home.welcomeTitle')}
-          </Typography>
-          <Divider sx={{ width: 60, borderColor: '#FFD700', borderWidth: 2, mx: 'auto', mb: 3 }} />
-          <Typography
-            variant="body1"
-            sx={{
-              color: 'rgba(255,255,255,0.75)',
-              lineHeight: 1.9,
-              fontSize: { xs: '1rem', md: '1.1rem' },
-            }}
-          >
-            {t('home.welcomeDesc')}
-          </Typography>
-        </Container>
-      </Box>
-
     </Box>
   );
 }

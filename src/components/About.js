@@ -34,7 +34,7 @@ export default function About() {
             variant="overline"
             sx={{ color: '#FFD700', letterSpacing: 4, display: 'block', mb: 1 }}
           >
-            ॥ शक्तिपीठ ॥
+            ॥ जय माँ कामाख्या ॥ Welcome to Kamakhya ॥
           </Typography>
           <Typography
             variant="h3"

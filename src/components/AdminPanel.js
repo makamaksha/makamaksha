@@ -59,6 +59,9 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
   const [videoCaptionHi, setVideoCaptionHi] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [videoType, setVideoType] = useState('youtube');
+  const [videoPreview, setVideoPreview] = useState('');
+  const [videoSizeWarn, setVideoSizeWarn] = useState(false);
+  const videoInputRef = useRef();
 
   // Event state
   const [eventTitle, setEventTitle] = useState('');
@@ -77,6 +80,24 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
     reader.onload = (ev) => {
       setPhotoPreview(ev.target.result);
       setPhotoUrl(ev.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleVideoFile = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setVideoSizeWarn(false);
+    if (file.size > 50 * 1024 * 1024) {
+      setVideoSizeWarn(true);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(file);
+    setVideoPreview(objectUrl);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setVideoUrl(ev.target.result);
+      setVideoType('file');
     };
     reader.readAsDataURL(file);
   };
@@ -222,6 +243,9 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
     setVideoCaption('');
     setVideoCaptionHi('');
     setVideoUrl('');
+    setVideoPreview('');
+    setVideoSizeWarn(false);
+    if (videoInputRef.current) videoInputRef.current.value = '';
     setSnack(t('admin.uploadSuccess'));
   };
 
@@ -525,12 +549,81 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
                   {t('admin.uploadVideo')}
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'rgba(255,220,150,0.7)' }}>
-                  Add a YouTube link or video URL
+                  Upload from device or add a YouTube / Drive link
                 </Typography>
               </Box>
             </Box>
 
             <CardContent sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 3 }}>
+              {/* Device upload drop zone */}
+              <Box
+                onClick={() => videoInputRef.current && videoInputRef.current.click()}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const file = e.dataTransfer.files[0];
+                  if (file) {
+                    const synth = { target: { files: [file] } };
+                    handleVideoFile(synth);
+                  }
+                }}
+                sx={{
+                  border: '2px dashed rgba(255,215,0,0.3)',
+                  borderRadius: 3,
+                  p: 4,
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  bgcolor: 'rgba(255,215,0,0.03)',
+                  transition: 'all 0.2s',
+                  '&:hover': { borderColor: 'rgba(255,215,0,0.6)', bgcolor: 'rgba(255,215,0,0.07)' },
+                }}
+              >
+                {videoPreview ? (
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
+                    <video
+                      src={videoPreview}
+                      controls
+                      style={{ maxHeight: 180, maxWidth: '100%', borderRadius: 8, background: '#000' }}
+                    />
+                    <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.7)' }}>
+                      Video selected — click to change
+                    </Typography>
+                  </Box>
+                ) : (
+                  <>
+                    <Typography sx={{ fontSize: '2.5rem', mb: 1 }}>🎬</Typography>
+                    <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
+                      Click to select a video
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', mt: 0.5 }}>
+                      MP4 format recommended · max 50 MB
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', display: 'block' }}>
+                      or drag & drop here
+                    </Typography>
+                  </>
+                )}
+              </Box>
+              <input
+                ref={videoInputRef}
+                type="file"
+                accept="video/mp4,video/webm,video/*"
+                style={{ display: 'none' }}
+                onChange={handleVideoFile}
+              />
+              {videoSizeWarn && (
+                <Typography variant="caption" sx={{ color: '#ff6b6b', fontWeight: 600 }}>
+                  ⚠️ Video is larger than 50 MB. Please use YouTube or Google Drive for large videos.
+                </Typography>
+              )}
+
+              {/* OR divider */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.15)' }} />
+                <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.5)', fontWeight: 600 }}>OR ADD LINK</Typography>
+                <Divider sx={{ flex: 1, borderColor: 'rgba(255,215,0,0.15)' }} />
+              </Box>
+
               {/* Type selector */}
               <Box sx={{ display: 'flex', gap: 1.5 }}>
                 {[{ type: 'youtube', label: '▶ YouTube', desc: 'youtu.be link' }, { type: 'file', label: '📁 Direct URL', desc: 'mp4 / web link' }, { type: 'gdrive', label: '🟢 Google Drive', desc: 'Drive video' }].map((opt) => (
