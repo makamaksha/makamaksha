@@ -52,6 +52,8 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
   const [photoCaptionHi, setPhotoCaptionHi] = useState('');
   const [photoPreview, setPhotoPreview] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [photoUploadProgress, setPhotoUploadProgress] = useState(0);
   const photoInputRef = useRef();
 
   // Video state
@@ -61,7 +63,40 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
   const [videoType, setVideoType] = useState('youtube');
   const [videoPreview, setVideoPreview] = useState('');
   const [videoSizeWarn, setVideoSizeWarn] = useState(false);
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [videoUploadProgress, setVideoUploadProgress] = useState(0);
   const videoInputRef = useRef();
+
+  const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+  const UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+  const isCloudinaryConfigured = CLOUD_NAME && UPLOAD_PRESET;
+
+  const uploadToCloudinary = (file, resourceType, onProgress) => {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+      formData.append('folder', 'kamakhya-mandir');
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`);
+
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
+      };
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+          resolve(data.secure_url);
+        } else {
+          reject(new Error('Upload failed'));
+        }
+      };
+      xhr.onerror = () => reject(new Error('Network error'));
+      xhr.send(formData);
+    });
+  };
 
   // Event state
   const [eventTitle, setEventTitle] = useState('');
@@ -73,33 +108,72 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
   const [eventDesc, setEventDesc] = useState('');
   const [eventDescHi, setEventDescHi] = useState('');
 
-  const handlePhotoFile = (e) => {
+  const handlePhotoFile = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setPhotoPreview(ev.target.result);
-      setPhotoUrl(ev.target.result);
-    };
-    reader.readAsDataURL(file);
+    // Show local preview immediately
+    const localUrl = URL.createObjectURL(file);
+    setPhotoPreview(localUrl);
+    setPhotoUrl('');
+
+    if (isCloudinaryConfigured) {
+      setPhotoUploading(true);
+      setPhotoUploadProgress(0);
+      try {
+        const url = await uploadToCloudinary(file, 'image', setPhotoUploadProgress);
+        setPhotoUrl(url);
+        setPhotoPreview(url);
+      } catch {
+        setSnack('Upload failed. Please try again or paste a URL below.');
+      } finally {
+        setPhotoUploading(false);
+      }
+    } else {
+      // Fallback: base64 (localStorage, session only)
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setPhotoPreview(ev.target.result);
+        setPhotoUrl(ev.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleVideoFile = (e) => {
+  const handleVideoFile = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setVideoSizeWarn(false);
-    if (file.size > 50 * 1024 * 1024) {
-      setVideoSizeWarn(true);
-      return;
+
+    if (isCloudinaryConfigured) {
+      const localUrl = URL.createObjectURL(file);
+      setVideoPreview(localUrl);
+      setVideoUrl('');
+      setVideoUploading(true);
+      setVideoUploadProgress(0);
+      try {
+        const url = await uploadToCloudinary(file, 'video', setVideoUploadProgress);
+        setVideoUrl(url);
+        setVideoPreview(url);
+        setVideoType('file');
+      } catch {
+        setSnack('Video upload failed. Please try again or use a YouTube/Drive link.');
+      } finally {
+        setVideoUploading(false);
+      }
+    } else {
+      if (file.size > 50 * 1024 * 1024) {
+        setVideoSizeWarn(true);
+        return;
+      }
+      const objectUrl = URL.createObjectURL(file);
+      setVideoPreview(objectUrl);
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setVideoUrl(ev.target.result);
+        setVideoType('file');
+      };
+      reader.readAsDataURL(file);
     }
-    const objectUrl = URL.createObjectURL(file);
-    setVideoPreview(objectUrl);
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setVideoUrl(ev.target.result);
-      setVideoType('file');
-    };
-    reader.readAsDataURL(file);
   };
 
   const handleAddPhoto = () => {
@@ -385,27 +459,42 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
             <CardContent sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 3 }}>
               {/* Drop zone */}
               <Box
-                onClick={() => photoInputRef.current?.click()}
+                onClick={() => !photoUploading && photoInputRef.current?.click()}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const file = e.dataTransfer.files[0];
+                  if (file) handlePhotoFile({ target: { files: [file] } });
+                }}
                 sx={{
                   border: `2px dashed ${photoPreview ? 'rgba(255,215,0,0.6)' : 'rgba(255,215,0,0.3)'}`,
                   borderRadius: 3,
                   p: 4,
                   textAlign: 'center',
-                  cursor: 'pointer',
+                  cursor: photoUploading ? 'wait' : 'pointer',
                   bgcolor: photoPreview ? 'rgba(255,215,0,0.04)' : 'rgba(255,255,255,0.02)',
                   transition: 'all 0.25s',
-                  '&:hover': {
+                  '&:hover': !photoUploading ? {
                     border: '2px dashed rgba(255,215,0,0.8)',
                     bgcolor: 'rgba(255,215,0,0.06)',
                     transform: 'scale(1.005)',
-                  },
+                  } : {},
                 }}
               >
-                {photoPreview ? (
+                {photoUploading ? (
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                    <Typography sx={{ fontSize: '2.5rem' }}>☁️</Typography>
+                    <Typography sx={{ color: '#FFD700', fontWeight: 700 }}>Uploading to Cloudinary…</Typography>
+                    <Box sx={{ width: '100%', bgcolor: 'rgba(255,255,255,0.1)', borderRadius: 5, height: 8 }}>
+                      <Box sx={{ width: `${photoUploadProgress}%`, bgcolor: '#FFD700', borderRadius: 5, height: 8, transition: 'width 0.3s' }} />
+                    </Box>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)' }}>{photoUploadProgress}%</Typography>
+                  </Box>
+                ) : photoPreview ? (
                   <Box>
                     <img src={photoPreview} alt="preview" style={{ maxHeight: 180, maxWidth: '100%', borderRadius: 10, boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }} />
                     <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)', display: 'block', mt: 1 }}>
-                      Click to change image
+                      ✅ Uploaded to Cloudinary — click to change
                     </Typography>
                   </Box>
                 ) : (
@@ -414,13 +503,16 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
                     <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, mb: 0.5 }}>
                       Click to select a photo
                     </Typography>
-                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)' }}>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)', display: 'block' }}>
                       Supports JPG · PNG · WEBP
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.4)', display: 'block', mt: 0.5 }}>
+                      ☁️ Uploaded permanently to Cloudinary
                     </Typography>
                   </>
                 )}
               </Box>
-              <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoFile} />
+              <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoFile} disabled={photoUploading} />
 
               {/* OR divider */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -511,7 +603,7 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
                 variant="contained"
                 startIcon={<CloudUploadIcon />}
                 onClick={handleAddPhoto}
-                disabled={!photoUrl && !photoPreview}
+                disabled={(!photoUrl && !photoPreview) || photoUploading}
                 sx={{
                   background: 'linear-gradient(135deg, #8B1A1A 0%, #a52828 100%)',
                   color: '#FFD700',
@@ -557,28 +649,34 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
             <CardContent sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 3 }}>
               {/* Device upload drop zone */}
               <Box
-                onClick={() => videoInputRef.current && videoInputRef.current.click()}
+                onClick={() => !videoUploading && videoInputRef.current && videoInputRef.current.click()}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   e.preventDefault();
                   const file = e.dataTransfer.files[0];
-                  if (file) {
-                    const synth = { target: { files: [file] } };
-                    handleVideoFile(synth);
-                  }
+                  if (file) handleVideoFile({ target: { files: [file] } });
                 }}
                 sx={{
                   border: '2px dashed rgba(255,215,0,0.3)',
                   borderRadius: 3,
                   p: 4,
                   textAlign: 'center',
-                  cursor: 'pointer',
+                  cursor: videoUploading ? 'wait' : 'pointer',
                   bgcolor: 'rgba(255,215,0,0.03)',
                   transition: 'all 0.2s',
-                  '&:hover': { borderColor: 'rgba(255,215,0,0.6)', bgcolor: 'rgba(255,215,0,0.07)' },
+                  '&:hover': !videoUploading ? { borderColor: 'rgba(255,215,0,0.6)', bgcolor: 'rgba(255,215,0,0.07)' } : {},
                 }}
               >
-                {videoPreview ? (
+                {videoUploading ? (
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                    <Typography sx={{ fontSize: '2.5rem' }}>☁️</Typography>
+                    <Typography sx={{ color: '#FFD700', fontWeight: 700 }}>Uploading video to Cloudinary…</Typography>
+                    <Box sx={{ width: '100%', bgcolor: 'rgba(255,255,255,0.1)', borderRadius: 5, height: 8 }}>
+                      <Box sx={{ width: `${videoUploadProgress}%`, bgcolor: '#FFD700', borderRadius: 5, height: 8, transition: 'width 0.3s' }} />
+                    </Box>
+                    <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.6)' }}>{videoUploadProgress}% — please wait</Typography>
+                  </Box>
+                ) : videoPreview ? (
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
                     <video
                       src={videoPreview}
@@ -586,7 +684,7 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
                       style={{ maxHeight: 180, maxWidth: '100%', borderRadius: 8, background: '#000' }}
                     />
                     <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.7)' }}>
-                      Video selected — click to change
+                      ✅ Uploaded to Cloudinary — click to change
                     </Typography>
                   </Box>
                 ) : (
@@ -596,10 +694,10 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
                       Click to select a video
                     </Typography>
                     <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block', mt: 0.5 }}>
-                      MP4 format recommended · max 50 MB
+                      MP4 format recommended
                     </Typography>
-                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', display: 'block' }}>
-                      or drag & drop here
+                    <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.4)', display: 'block', mt: 0.3 }}>
+                      ☁️ Uploaded permanently to Cloudinary
                     </Typography>
                   </>
                 )}
@@ -610,21 +708,12 @@ export default function AdminPanel({ themeColor, onThemeChange }) {
                 accept="video/mp4,video/webm,video/*"
                 style={{ display: 'none' }}
                 onChange={handleVideoFile}
+                disabled={videoUploading}
               />
               {videoSizeWarn && (
                 <Typography variant="caption" sx={{ color: '#ff6b6b', fontWeight: 600 }}>
                   ⚠️ Video is larger than 50 MB. Please use YouTube or Google Drive for large videos.
                 </Typography>
-              )}
-              {videoPreview && !videoSizeWarn && (
-                <Box sx={{ bgcolor: 'rgba(255,165,0,0.1)', border: '1px solid rgba(255,165,0,0.3)', borderRadius: 2, p: 2 }}>
-                  <Typography variant="caption" sx={{ color: 'rgba(255,180,60,0.9)', display: 'block', fontWeight: 600 }}>
-                    📱 Device videos play in this session only
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'rgba(255,180,60,0.6)', display: 'block', mt: 0.4 }}>
-                    Browsers can't store large video files permanently. For videos that stay after refresh, upload to <strong>YouTube</strong> or <strong>Google Drive</strong> and add the link below instead.
-                  </Typography>
-                </Box>
               )}
 
               {/* OR divider */}
