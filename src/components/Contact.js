@@ -15,6 +15,7 @@ import {
   ListItemIcon,
   ListItemText,
   InputAdornment,
+  CircularProgress,
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -26,6 +27,7 @@ import FlightIcon from '@mui/icons-material/Flight';
 import SubwayIcon from '@mui/icons-material/Subway';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import { useTranslation } from 'react-i18next';
+import emailjs from '@emailjs/browser';
 
 const TRAVEL = [
   { icon: <FlightIcon sx={{ color: '#FFD700', fontSize: '1.1rem' }} />, key: 'about.byAir' },
@@ -37,21 +39,37 @@ export default function Contact() {
   const { t } = useTranslation();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Message from ${form.name} — Maa Kamakhya Mandir Website`);
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
-    );
-    window.open(
-      `mailto:mokshdaynimakamakshadham@gmail.com?subject=${subject}&body=${body}`,
-      '_blank'
-    );
-    setSuccess(true);
-    setForm({ name: '', email: '', message: '' });
+    setSending(true);
+    setError(false);
+
+    emailjs
+      .send(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          message: form.message,
+          to_email: 'mokshdaynimakamakshadham@gmail.com',
+        },
+        process.env.REACT_APP_EMAILJS_PUBLIC_KEY
+      )
+      .then(() => {
+        setSending(false);
+        setSuccess(true);
+        setForm({ name: '', email: '', message: '' });
+      })
+      .catch(() => {
+        setSending(false);
+        setError(true);
+      });
   };
 
   const inputSx = {
@@ -339,7 +357,8 @@ export default function Contact() {
                     type="submit"
                     variant="contained"
                     fullWidth
-                    endIcon={<SendIcon />}
+                    disabled={sending}
+                    endIcon={sending ? <CircularProgress size={18} sx={{ color: '#FFD700' }} /> : <SendIcon />}
                     sx={{
                       background: 'linear-gradient(135deg, #8B1A1A 0%, #a52828 100%)',
                       color: '#FFD700',
@@ -355,9 +374,10 @@ export default function Contact() {
                         boxShadow: '0 6px 28px rgba(139,26,26,0.7)',
                         transform: 'translateY(-1px)',
                       },
+                      '&.Mui-disabled': { background: 'rgba(139,26,26,0.4)', color: 'rgba(255,215,0,0.4)' },
                     }}
                   >
-                    {t('contact.send')}
+                    {sending ? 'Sending…' : t('contact.send')}
                   </Button>
 
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
@@ -372,7 +392,7 @@ export default function Contact() {
 
       <Snackbar
         open={success}
-        autoHideDuration={4000}
+        autoHideDuration={5000}
         onClose={() => setSuccess(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
@@ -381,7 +401,22 @@ export default function Contact() {
           severity="success"
           sx={{ bgcolor: 'rgba(76,175,80,0.2)', color: '#81c784', border: '1px solid rgba(76,175,80,0.4)' }}
         >
-          {t('contact.sendSuccess')}
+          🙏 Message sent! We will get back to you soon.
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={error}
+        autoHideDuration={6000}
+        onClose={() => setError(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setError(false)}
+          severity="error"
+          sx={{ bgcolor: 'rgba(211,47,47,0.2)', color: '#ef9a9a', border: '1px solid rgba(211,47,47,0.4)' }}
+        >
+          ⚠️ Failed to send message. Please try again or call us directly.
         </Alert>
       </Snackbar>
     </Box>
