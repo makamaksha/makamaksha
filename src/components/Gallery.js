@@ -6,7 +6,6 @@ import {
   Tabs,
   Tab,
   Card,
-  CardMedia,
   CardContent,
   Divider,
   Dialog,
@@ -93,8 +92,9 @@ function PhotoCarousel({ photos, isHindi, onOpen }) {
       <Box
         sx={{
           position: 'relative',
-          height: { xs: 240, sm: 380, md: 500 },
+          height: { xs: 280, sm: 420, md: 540 },
           overflow: 'hidden',
+          bgcolor: '#000',
         }}
       >
         <Box
@@ -108,11 +108,32 @@ function PhotoCarousel({ photos, isHindi, onOpen }) {
             transition: 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s ease',
           }}
         >
+          {/* Blurred background — fills letterbox areas */}
+          <img
+            src={photo.url}
+            alt=""
+            aria-hidden="true"
+            onError={(e) => { e.target.onerror = null; }}
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover', objectPosition: 'center',
+              filter: 'blur(22px) brightness(0.4)',
+              transform: 'scale(1.1)',
+              pointerEvents: 'none',
+            }}
+          />
+          {/* Main image — fully visible, no cropping */}
           <img
             src={photo.url}
             alt={isHindi ? photo.captionHi : photo.caption}
             onError={(e) => { e.target.onerror = null; e.target.src = FALLBACK_IMG; }}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block', cursor: 'pointer' }}
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'contain',
+              display: 'block', cursor: 'pointer',
+            }}
             onClick={() => onOpen(photo)}
           />
         </Box>
@@ -521,14 +542,22 @@ export default function Gallery() {
                       '&:hover': { border: '1px solid rgba(255,215,0,0.4)', transform: 'translateY(-4px)', boxShadow: '0 8px 28px rgba(0,0,0,0.55)' },
                     }}
                   >
-                    <CardMedia
-                      component="img"
-                      height="180"
-                      image={photo.url}
-                      alt={isHindi ? photo.captionHi : photo.caption}
-                      sx={{ objectFit: 'cover', objectPosition: 'top' }}
-                      onError={(e) => { e.target.onerror = null; e.target.src = FALLBACK_IMG; }}
-                    />
+                    {/* Blur-background thumbnail — no cropping */}
+                    <Box sx={{ position: 'relative', height: 180, overflow: 'hidden', bgcolor: '#000' }}>
+                      <img
+                        src={photo.url}
+                        alt=""
+                        aria-hidden="true"
+                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(14px) brightness(0.4)', transform: 'scale(1.1)', pointerEvents: 'none' }}
+                        onError={(e) => { e.target.onerror = null; }}
+                      />
+                      <img
+                        src={photo.url}
+                        alt={isHindi ? photo.captionHi : photo.caption}
+                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                        onError={(e) => { e.target.onerror = null; e.target.src = FALLBACK_IMG; }}
+                      />
+                    </Box>
                     <CardContent sx={{ p: 1.2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', '&:last-child': { pb: 1.2 } }}>
                       <Typography variant="caption" sx={{ color: 'rgba(255,215,0,0.8)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {isHindi ? photo.captionHi : photo.caption}
