@@ -49,37 +49,32 @@ export default function Footer({ themeColor }) {
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={4} sx={{ mb: 4 }}>
-          {/* Brand */}
-          <Grid item xs={12} md={4}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-              <Typography sx={{ fontSize: '2rem' }}>🛕</Typography>
-              <Box>
-                <Typography variant="h6" sx={{ color: '#FFD700', fontWeight: 700 }}>
-                  Maa Kamakhya Mandir
-                </Typography>
-                <Typography variant="caption" sx={{ color: 'rgba(255,200,100,0.7)' }}>
-                  माँ कामाख्या मंदिर
-                </Typography>
-              </Box>
-            </Box>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, mb: 2 }}>
-              One of India's most sacred Shakti Peethas, nestled atop Nilachal Hill in Guwahati, Assam. A beacon of divine energy and spiritual awakening.
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{ color: 'rgba(255,215,0,0.6)', fontStyle: 'italic', fontWeight: 400 }}
-            >
-              {t('footer.tagline')}
-            </Typography>
-          </Grid>
+        {/* Top: logo + tagline centred */}
+        <Box sx={{ textAlign: 'center', mb: 5 }}>
+          <Typography sx={{ fontSize: '2.8rem', lineHeight: 1, mb: 1.5 }}>🛕</Typography>
+          <Typography variant="h5" sx={{ color: '#FFD700', fontWeight: 800, letterSpacing: 1, mb: 0.5 }}>
+            Maa Kamakhya Mandir
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,200,100,0.6)', letterSpacing: 2, mb: 2 }}>
+            माँ कामाख्या मंदिर · Vikaspuri, New Delhi
+          </Typography>
+          <Typography variant="body1" sx={{ color: 'rgba(255,215,0,0.55)', fontStyle: 'italic', fontWeight: 400 }}>
+            {t('footer.tagline')}
+          </Typography>
+        </Box>
 
+        <Divider sx={{ borderColor: 'rgba(255,215,0,0.1)', mb: 5 }} />
+
+        <Grid container spacing={4} justifyContent="center" sx={{ mb: 5 }}>
           {/* Quick Links */}
-          <Grid item xs={6} md={3}>
-            <Typography variant="subtitle1" sx={{ color: '#FFD700', fontWeight: 700, mb: 2 }}>
+          <Grid item xs={12} sm={4} sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
+            <Typography
+              variant="overline"
+              sx={{ color: '#FFD700', letterSpacing: 3, fontWeight: 700, display: 'block', mb: 2 }}
+            >
               {t('footer.quickLinks')}
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.2 }}>
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.key}
@@ -87,12 +82,12 @@ export default function Footer({ themeColor }) {
                   onClick={() => scrollTo(link.href)}
                   underline="none"
                   sx={{
-                    color: 'rgba(255,255,255,0.55)',
-                    textAlign: 'left',
+                    color: 'rgba(255,255,255,0.5)',
+                    textAlign: { xs: 'center', sm: 'left' },
                     cursor: 'pointer',
-                    transition: 'color 0.2s',
+                    transition: 'all 0.2s',
                     fontSize: '0.9rem',
-                    '&:hover': { color: '#FFD700' },
+                    '&:hover': { color: '#FFD700', paddingLeft: '6px' },
                   }}
                 >
                   › {t(link.key)}
@@ -101,12 +96,20 @@ export default function Footer({ themeColor }) {
             </Box>
           </Grid>
 
-          {/* Social */}
-          <Grid item xs={12} md={3}>
-            <Typography variant="subtitle1" sx={{ color: '#FFD700', fontWeight: 700, mb: 2 }}>
+          {/* Vertical divider on desktop */}
+          <Grid item sm={1} sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: 'center' }}>
+            <Divider orientation="vertical" sx={{ borderColor: 'rgba(255,215,0,0.1)', height: '100%' }} />
+          </Grid>
+
+          {/* Follow Us */}
+          <Grid item xs={12} sm={4} sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
+            <Typography
+              variant="overline"
+              sx={{ color: '#FFD700', letterSpacing: 3, fontWeight: 700, display: 'block', mb: 2 }}
+            >
               {t('footer.followUs')}
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
+            <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', justifyContent: { xs: 'center', sm: 'flex-start' } }}>
               {SOCIAL.map((s) => (
                 <Tooltip key={s.label} title={s.label}>
                   <IconButton
@@ -114,13 +117,16 @@ export default function Footer({ themeColor }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     sx={{
-                      color: 'rgba(255,255,255,0.5)',
-                      bgcolor: 'rgba(255,255,255,0.05)',
-                      border: '1px solid rgba(255,255,255,0.1)',
+                      color: 'rgba(255,255,255,0.45)',
+                      bgcolor: 'rgba(255,255,255,0.04)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      transition: 'all 0.25s',
                       '&:hover': {
                         color: '#FFD700',
                         bgcolor: 'rgba(255,215,0,0.1)',
                         border: '1px solid rgba(255,215,0,0.4)',
+                        transform: 'translateY(-3px)',
+                        boxShadow: '0 4px 12px rgba(255,215,0,0.15)',
                       },
                     }}
                   >
@@ -129,11 +135,16 @@ export default function Footer({ themeColor }) {
                 </Tooltip>
               ))}
             </Box>
-
+            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.25)', display: 'block', mt: 2 }}>
+              📞 +91 93137 15551
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.25)', display: 'block', mt: 0.5 }}>
+              ✉️ mokshdaynimakamakshadham@gmail.com
+            </Typography>
           </Grid>
         </Grid>
 
-        <Divider sx={{ borderColor: 'rgba(255,215,0,0.1)', mb: 3 }} />
+        <Divider sx={{ borderColor: 'rgba(255,215,0,0.08)', mb: 3 }} />
 
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.35)' }}>
