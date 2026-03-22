@@ -112,7 +112,7 @@ function PhotoCarousel({ photos, isHindi, onOpen }) {
             src={photo.url}
             alt={isHindi ? photo.captionHi : photo.caption}
             onError={(e) => { e.target.onerror = null; e.target.src = FALLBACK_IMG; }}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'pointer' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block', cursor: 'pointer' }}
             onClick={() => onOpen(photo)}
           />
         </Box>
@@ -526,7 +526,7 @@ export default function Gallery() {
                       height="180"
                       image={photo.url}
                       alt={isHindi ? photo.captionHi : photo.caption}
-                      sx={{ objectFit: 'cover' }}
+                      sx={{ objectFit: 'cover', objectPosition: 'top' }}
                       onError={(e) => { e.target.onerror = null; e.target.src = FALLBACK_IMG; }}
                     />
                     <CardContent sx={{ p: 1.2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', '&:last-child': { pb: 1.2 } }}>
