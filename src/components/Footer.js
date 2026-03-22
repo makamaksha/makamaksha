@@ -101,24 +101,6 @@ export default function Footer({ themeColor }) {
             </Box>
           </Grid>
 
-          {/* Info */}
-          <Grid item xs={6} md={2}>
-            <Typography variant="subtitle1" sx={{ color: '#FFD700', fontWeight: 700, mb: 2 }}>
-              Info
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              {['Darshan Timings', 'Festivals', 'Directions', 'Donations'].map((item) => (
-                <Typography
-                  key={item}
-                  variant="body2"
-                  sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.9rem' }}
-                >
-                  › {item}
-                </Typography>
-              ))}
-            </Box>
-          </Grid>
-
           {/* Social */}
           <Grid item xs={12} md={3}>
             <Typography variant="subtitle1" sx={{ color: '#FFD700', fontWeight: 700, mb: 2 }}>
